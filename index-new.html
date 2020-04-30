@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+		<title>James Daniel Enovero - Web Developer</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="description" content="Hi, I'm James Daniel Enovero. A Web Developer based in Cebu, Philippines."/>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="style.min.css">
+		<link rel="shortcut icon" href="favicon.png" sizes="32x32" type="image/png">
+		<meta name="keywords" content="Web Developer, Web Dev, Web Developer in Philippines, Web Developer in PH"/>
+		<meta property="og:description" content="Hi, I'm James Daniel Enovero. A Web Developer based in Cebu, Philippines.">
+        <meta name="google-site-verification" content="n2Y790xjA0745ID56B0KKr70AOO5x6K6uCIYm7mIYvY"/>
+        <script src="https://kit.fontawesome.com/7693f8933b.js" crossorigin="anonymous"></script>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-142689271-1"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'UA-142689271-1');
+		</script>
+</head>
+<body class="theme-2">
+
+<header id="home">
+    <div class="wrapper">
+
+        <div class="header_con">
+
+            <figure><a href="index.html"><img src="icon.png" alt="jde."></a></figure>
+
+        </div>
+
+    </div>
+</header>
+
+<div id="banner">
+    <div class="wrapper">
+
+        <div class="banner_con">
+
+            <h1>
+                <p>hello! my name is <span>James Daniel Enovero</span></p>
+                <p>i'm a&nbsp;<mark class="typewrite" data-period="3000" data-type='["front-end developer.","back-end developer."]'></mark></p>
+            </h1>
+
+            <div class="btns">
+                <a href="javascript:;">Contact Me</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/intersection-observer@0.5.1/intersection-observer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@12.0.0/dist/lazyload.min.js"></script>
+    <script src="js/typewriter.min.js"></script>
+
+    <script>
+
+        var lazyLoadInstance = new LazyLoad({
+            elements_selector: ".lazy"
+        });
+
+    </script>
+
+    <!-- <script src="js/jquery.particleground.min.js"></script>
+    <script src="js/demo.js"></script> -->
+
+    <script>
+
+        const typing = document.querySelectorAll('.typewriter');
+
+        function type(element) {
+
+        function randomOpacity() {
+            return (Math.floor(Math.random() * 50) + 50)/100;
+        }
+
+        function randomEms() {
+            if (Math.random() > .8) {
+            return (Math.floor(Math.random() * 100) - 50)/800;
+            }
+            else {
+            return 0;
+            }
+        }
+
+        function wrap(char) {
+            return '<span style="opacity:' + randomOpacity() + '; text-shadow:' + randomEms() + 'em ' + randomEms() + 'em currentColor;">' + char + '</span>';
+        }
+
+        const wrappedText = Array.from(element.textContent).map(wrap);
+
+        element.innerHTML = wrappedText.join('');
+
+        }
+
+        typing.forEach(type);
+
+    </script>
+
+</body>
+</html>
