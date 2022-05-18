@@ -165,14 +165,17 @@ body {box-sizing: border-box;margin: 0;font-family: 'Patua One', cursive;font-si
 
 /* Start Theme: 404 */
 
-	.page404 header {position: relative;height: 100vh;overflow-x: hidden;}
+	.page404 header {position: relative;height: 100vh;overflow-x: hidden;background: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);}
 	.page404 .header {height: 100vh;display: flex;justify-content: center;align-items: center;text-align: center;}
 	.page404 .header_con {display: flex;flex-flow: column;justify-content: center;align-items: center;}
 	.page404 .header_con h2 {font-size: 10vw;line-height: 1;}
-	.page404 .header_con h2 span {color: red;}
+	.page404 .header_con h2 span {display: inline-block;}
+	.page404 .header_con h2 span.num1 {color: black;animation: bounce 1s ease infinite .1s;}
+	.page404 .header_con h2 span.num2 {color: red;animation: bounce 1s ease infinite .2s;}
+	.page404 .header_con h2 span.num3 {color: black;animation: bounce 1s ease infinite .3s;}
 	.page404 .header_con h3 {font-size: 3vw;line-height: 1;}
 	.page404 .header_con h3 span {color: red;}
-	.page404 .header_con a {display: block;position: relative;margin-top: 5em;color: red;}
+	.page404 .header_con a {display: block;position: relative;margin-top: 5em;color: red;text-shadow: 0.075em 0.08em 0.1em rgba(0, 0, 0, 1);}
 	.page404 .header_con a:after {content: '';position: absolute;bottom: -5px;left: 0;width: 0;height: 2px;background: red;transition: ease 500ms;}
 	.page404 .header_con a:hover:after {width: 100%;}
 
@@ -183,6 +186,16 @@ body {box-sizing: border-box;margin: 0;font-family: 'Patua One', cursive;font-si
 @keyframes animated-cursor{
   from{border-right-color: #0f2;}
   to{border-right-color: transparent;}
+}
+
+@keyframes bounce {
+	0%{transform:scale(1,1) translateY(0);}
+	10%{transform:scale(1.1,.9) translateY(0);}
+	30%{transform:scale(.9,1.1) translateY(-55px);}
+	50%{transform:scale(1.05,.95) translateY(0);}
+	58%{transform:scale(1,1) translateY(-7px);}
+	65%{transform:scale(1,1) translateY(0);}
+	100%{transform:scale(1,1) translateY(0);}
 }
 
 @-webkit-keyframes flow {

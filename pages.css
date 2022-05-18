@@ -10,7 +10,9 @@
 .portfolio_con .pc_box section h2{font-size:24px;margin-bottom:10px;}
 .portfolio_con .pc_box section p{font-family:'Montserrat';font-size:18px;font-weight:300;margin-bottom:15px;}
 .portfolio_con .pc_box ul{display:flex;flex-flow:row wrap;justify-content:flex-start;align-items:center;gap:10px;}
-.portfolio_con .pc_box:hover{transform:scale(1.02);cursor:pointer;}
+.portfolio_con .pc_box figure{overflow:hidden;}
+.portfolio_con .pc_box:hover{cursor:pointer;}
+.portfolio_con .pc_box:hover figure img{transform:scale(1.1);}
 
 @media only screen and (max-width : 1400px) {
 	.default .header{padding:40px 20px;}
