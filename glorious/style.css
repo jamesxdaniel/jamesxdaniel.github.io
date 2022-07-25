@@ -18,8 +18,7 @@ mark{background-color:transparent;}
 /* end reset */
 
 /*preset*/
-body{font-family:'Open Sans',sans-serif;font-size:18px;line-height:22px;color:#fff;position:relative;max-width:1920px;margin:0 auto;overflow-x:hidden;}
-body.active{overflow:hidden;width:100%;height:100%;position:fixed!important;}
+body{font-family:'Open Sans',sans-serif;font-size:18px;line-height:22px;color:#fff;position:relative;width:100%;margin:0 auto;overflow-x:hidden;}
 a{text-decoration:none;-webkit-transition:all .3s linear;transition:all .3s linear;}
 img{max-width:100%;vertical-align:top;image-rendering:-webkit-optimize-contrast;}
 textarea{resize:vertical;}
@@ -37,7 +36,7 @@ a[href^="tel:"]{color:inherit!important;text-decoration:none;}
 
 /* header */
 .header_con{display:flex;flex-flow:row wrap;justify-content:space-between;align-items:center;min-height:120px;position:absolute;width:100%;z-index:99;padding: 0 25px;}
-.logo h1{font-family:Trade Winds,cursive;font-size:62px;font-weight:bold;color:#fff;text-shadow:0.075em 0.08em 0.1em rgba(0,0,0,1);}
+.logo h1{font-family:Trade Winds,cursive;font-size:62px;font-weight:bold;color:#e32323;text-shadow:0.075em 0.08em 0.1em rgba(0,0,0,1);}
 
 /* navigation */
 nav ul{display:flex;}
@@ -55,14 +54,25 @@ nav ul li a:hover::after{width:100%;}
 
 .banner_text{position:absolute;top:40%;left:25px;width:100%;max-width:500px;}
 .banner_text h2{font-family:Koulen,cursive;font-size:90px;color:#fff;margin-bottom:65px;}
-.banner_text p{line-height:32px;}
+.banner_text p{line-height:42px;}
 .banner_text p span{display:block;}
 .banner_text a{display:block;width:100%;max-width:200px;background:#e32323;color:#fff;text-align:center;line-height:60px;font-size:22px;margin-top:35px;}
 
 /* section1 */
-.section1_con{display:flex;flex-flow:row wrap;justify-content:space-between;align-items:center;padding:60px 25px;}
-.section1_con section{width:33%;text-align:center;}
+.section1_con{display:flex;flex-flow:row wrap;justify-content:space-between;align-items:center;padding:90px 25px;}
+.section1_con section{width:33%;text-align:center;padding:0 25px;}
 .section1_con section figure{width:300px;height:150px;margin:auto;border-bottom:1px solid #ccc;margin-bottom:25px;padding-bottom:25px;}
 .section1_con section figure img{width:100%;height:100%;object-fit:contain;}
 .section1_con section h2{font-family:Koulen,cursive;font-size:26px;color:#e32323;margin-bottom:15px;}
-.section1_con section p{color:#333;}
+.section1_con section p{font-size:14px;color:#333;}
+
+/* section2 */
+#section2{background:#e32323;}
+.section2_con{position:relative;padding:90px 25px;}
+.section2_con::before{content:'';position:absolute;top:0;left:50%;right:50%;width:100vw;border-left:960px solid transparent;border-right:960px solid transparent;border-top:290px solid white;transform:translateX(-50%);}
+.section2_box{position:relative;margin:0 auto;display:flex;flex-flow:row wrap;justify-content:center;align-items:center;width:100%;max-width:800px;height:300px;background:#fff;border:1px solid #ccc;}
+.section2_box section{width:50%;height:50%;display:flex;justify-content:center;align-items:center;}
+.section2_box section:nth-child(2n){border-left:1px solid #ccc;}
+.section2_box section:nth-child(2) ~ section{border-top:1px solid #ccc;}
+.section2_box section figure{width:100px;height:auto;}
+.section2_box section figure img{width:100%;height:100%;object-fit:contain;}
