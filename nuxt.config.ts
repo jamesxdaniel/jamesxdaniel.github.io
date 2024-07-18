@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
 	ssr: true,
-	css: ['public/assets/styles.css'],
+	css: ['~/assets/styles.css'],
 	app: {
 		head: {
 			title: 'James Daniel Enovero - Web Developer',
