@@ -1,7 +1,6 @@
 export default defineNuxtConfig({
 	ssr: true,
-	css: ['~/assets/style.css'],
-
+	css: ['public/assets/styles.css'],
 	app: {
 		head: {
 			title: 'James Daniel Enovero - Web Developer',
@@ -23,6 +22,5 @@ export default defineNuxtConfig({
 			]
 		}
 	},
-
 	compatibilityDate: '2024-07-19'
 })

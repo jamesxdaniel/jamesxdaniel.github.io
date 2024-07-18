@@ -136,12 +136,10 @@ header {
 	margin: 0 0 -70px 0;
 }
 
-.header_con picture img.lazy.error {
-	display: none;
-}
-
-.header_con picture source.lazy.error {
-	display: none;
+.header_con picture img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 .header_con h1 {
