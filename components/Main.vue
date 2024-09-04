@@ -15,7 +15,7 @@
 
 					<h2>I'm a <span class="typewrite" data-period="3000" data-type='["front-end developer.","back-end developer."]'></span></h2>
 
-					<p>Hi there! I'm a web developer with over 5 years of experience in <strong>HTML</strong>, <strong>CSS</strong>, <strong>JavaScript</strong>, and <strong>PHP</strong>. I also have expertise in <strong>Vue.js</strong> for developing web and mobile applications. I'm continuously learning and adapting to the latest industry trends.</p>
+					<p>Hi there! I'm a web developer with over 6 years of experience in <strong>HTML</strong>, <strong>CSS</strong>, <strong>JavaScript</strong>, and <strong>PHP</strong>. I also have expertise in <strong>Vue.js</strong> for developing web and mobile applications. I'm continuously learning and adapting to the latest industry trends.</p>
 
 					<ul class="logo">
 						<li><figure><a href="https://github.com/jamesxdaniel" target="_blank" rel="noopener"><img data-src="/images/github_logo.png" src="/images/github_logo.png" alt="GitHub" class="lazy"></a></figure></li>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import '~/assets/animation.css';
 import Typewriter from 'typewriter-effect/dist/core';
 
 export default {
@@ -81,7 +82,6 @@ header {
 	position: relative;
 	min-height: 100vh;
 	overflow-x: hidden;
-	background: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
 }
 
 .arrow_btn {
@@ -202,15 +202,29 @@ header {
 	padding: 0;
 }
 
+.waves {
+	position: absolute;
+	width: 100%;
+	height: 15vh;
+	bottom: 0;
+	min-height: 100px;
+	max-height: 150px;
+}
+
 @media only screen and (max-width : 768px) {
     .header_con {
-        margin: 70px 20px 0;
+        margin: 70px 20px;
+    }
+
+    .waves {
+        height: 40px;
+        min-height: 40px;
     }
 }
 
-@media only screen and (max-height : 700px) and (max-width : 768px) {
+@media only screen and (max-height : 800px) {
     .header_con {
-        margin: 140px 20px 70px;
+        margin: 140px 20px 100px;
     }
 }
 </style>
