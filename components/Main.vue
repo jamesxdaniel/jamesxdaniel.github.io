@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import '~/assets/animation.css';
 import Typewriter from 'typewriter-effect/dist/core';
 
 export default {
@@ -81,6 +80,7 @@ export default {
 header {
 	position: relative;
 	min-height: 100vh;
+	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVHja7M5RDYAwDEXRDgmvEocnlrQS2SwUFST9uEfBGWs9c97nbGtDcquqiKhOImLs/UpuzVzWEi1atGjRokWLFi1atGjRokWLFi1atGjRokWLFi1af7Ukz8xWp8z8AAAA//8DAJ4LoEAAlL1nAAAAAElFTkSuQmCC") repeat 0 0;
 	overflow-x: hidden;
 }
 
@@ -121,10 +121,10 @@ header {
 .header_con {
 	display: flex;
 	flex-flow: column wrap;
-	background: #fff;
+	background: #333;
 	max-width: 600px;
-	margin: 70px auto 0;
-	padding: 0 30px;
+	margin: 100px auto 70px;
+	padding: 30px;
 	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
@@ -144,23 +144,23 @@ header {
 
 .header_con h1 {
 	font: bold 28px/100% monospace;
-	color: black;
+	color: white;
 	text-align: left;
 	padding: 30px 0;
 }
 
 .header_con h2 {
 	font: normal 16px monospace;
-	color: black;
+	color: white;
 	text-align: left;
 	padding-bottom: 30px;
 }
 
 .header_con p {
 	font: normal 16px/26px monospace;
-	color: black;
+	color: white;
 	text-align: left;
-	border-bottom: 1px solid gainsboro;
+	border-bottom: 1px solid white;
 	padding-bottom: 30px;
 }
 
@@ -168,13 +168,9 @@ header {
 	font-weight: bold;
 }
 
-.header_con picture:hover {
-	transform: scale(.9);
-}
-
 .logo {
 	display: block;
-	margin: 30px 0;
+	margin: 30px 0 0;
 }
 
 .logo li {
@@ -184,22 +180,18 @@ header {
 }
 
 .logo li img {
-	width: 32px;
-	color: transparent;
+	width: 100%;
+	max-width: 42px;
+	height: 100%;
+	background: none;
+	border: 1px solid white;
+	border-radius: 50%;
+	padding: 0;
 }
 
 .logo li:hover img {
-	filter: invert(100%);
 	transform: scale(.8);
 	cursor: pointer;
-}
-
-.header .logo li img {
-	width: 100%;
-	max-width: 32px;
-	height: 100%;
-	background: none;
-	padding: 0;
 }
 
 .waves {
