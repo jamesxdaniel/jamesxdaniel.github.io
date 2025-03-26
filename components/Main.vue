@@ -15,7 +15,7 @@
 
 					<h2>I'm a <span class="typewrite" data-period="3000" data-type='["front-end developer.","back-end developer."]'></span></h2>
 
-					<p>Hi there! I'm a web developer with over 6 years of experience in <strong>HTML</strong>, <strong>CSS</strong>, <strong>JavaScript</strong>, and <strong>PHP</strong>. I also have expertise in <strong>Vue.js</strong> for developing web and mobile applications. I'm continuously learning and adapting to the latest industry trends.</p>
+					<p>Hi there! I'm a web developer with over <strong>6 years</strong> of experience in <strong>HTML</strong>, <strong>CSS</strong>, <strong>JavaScript</strong>, and <strong>PHP</strong>. I also have expertise in <strong>Vue.js</strong> for developing web and mobile applications. I'm continuously learning and adapting to the latest industry trends.</p>
 
 					<ul class="logo">
 						<li><figure><a href="https://github.com/jamesxdaniel" target="_blank" rel="noopener"><img data-src="/images/github_logo.png" src="/images/github_logo.png" alt="GitHub" class="lazy"></a></figure></li>
@@ -55,8 +55,7 @@ export default {
 			function randomEms() {
 				if (Math.random() > .8) {
 					return (Math.floor(Math.random() * 100) - 50) / 800;
-				}
-				else {
+				} else {
 					return 0;
 				}
 			}
@@ -146,7 +145,7 @@ header {
 	font: bold 28px/100% monospace;
 	color: white;
 	text-align: left;
-	padding: 30px 0;
+	padding: 30px 0 15px;
 }
 
 .header_con h2 {
