@@ -1,10 +1,18 @@
 <template>
     <header id="home">
 		<div class="header">
-
+			<div class="background-pattern"></div>
 			<div class="wrapper">
 
 				<div class="header_con">
+
+					<button class="theme-toggle" @click="toggleTheme" :title="isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+						<div class="toggle-track">
+							<div class="toggle-icon">
+								{{ isDark ? '☀️' : '🌙' }}
+							</div>
+						</div>
+					</button>
 
 					<picture class="me">
 						<source srcset="/images/me.webp" type="image/webp">
@@ -27,7 +35,6 @@
 				</div>
 
 			</div>
-
 		</div>
 	</header>
 </template>
@@ -36,7 +43,23 @@
 import Typewriter from 'typewriter-effect/dist/core';
 
 export default {
+	data() {
+		return {
+			isDark: false
+		}
+	},
 	mounted() {
+		// Check for saved theme preference
+		const savedTheme = localStorage.getItem('theme');
+		if (savedTheme) {
+			this.isDark = savedTheme === 'dark';
+			document.documentElement.setAttribute('data-theme', savedTheme);
+		} else {
+			// Check system preference
+			this.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			document.documentElement.setAttribute('data-theme', this.isDark ? 'dark' : 'light');
+		}
+
 		new Typewriter('.typewrite', {
 			strings: ['front-end developer.', 'back-end developer.'],
 			autoStart: true,
@@ -72,15 +95,80 @@ export default {
 
         typing.forEach(type);
 	}
+	,
+	methods: {
+		toggleTheme() {
+			this.isDark = !this.isDark;
+			const theme = this.isDark ? 'dark' : 'light';
+			document.documentElement.setAttribute('data-theme', theme);
+			localStorage.setItem('theme', theme);
+		}
+	}
 }
 </script>
+
+<style>
+:root[data-theme="light"] {
+	--bg-color: #ffffff;
+	--text-color: #333333;
+	--header-bg: #ffffff;
+	--header-text: #333333;
+	--border-color: #333333;
+	--pattern-invert: 1;
+	--toggle-bg: #2d2d2d;
+	--toggle-shadow: rgba(0, 0, 0, 0.2);
+	--toggle-hover-shadow: rgba(0, 0, 0, 0.3);
+}
+
+:root[data-theme="dark"] {
+	--bg-color: #1a1a1a;
+	--text-color: #ffffff;
+	--header-bg: #2d2d2d;
+	--header-text: #ffffff;
+	--border-color: #ffffff;
+	--pattern-invert: 0;
+	--toggle-bg: #e4e4e4;
+	--toggle-shadow: rgba(255, 255, 255, 0.1);
+	--toggle-hover-shadow: rgba(255, 255, 255, 0.2);
+}
+
+body {
+	background-color: var(--bg-color);
+	color: var(--text-color);
+	transition: background-color 0.3s, color 0.3s;
+}
+</style>
 
 <style scoped>
 header {
 	position: relative;
 	min-height: 100vh;
-	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVHja7M5RDYAwDEXRDgmvEocnlrQS2SwUFST9uEfBGWs9c97nbGtDcquqiKhOImLs/UpuzVzWEi1atGjRokWLFi1atGjRokWLFi1atGjRokWLFi1af7Ukz8xWp8z8AAAA//8DAJ4LoEAAlL1nAAAAAElFTkSuQmCC") repeat 0 0;
 	overflow-x: hidden;
+}
+
+.background-pattern {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVHja7M5RDYAwDEXRDgmvEocnlrQS2SwUFST9uEfBGWs9c97nbGtDcquqiKhOImLs/UpuzVzWEi1atGjRokWLFi1atGjRokWLFi1atGjRokWLFi1af7Ukz8xWp8z8AAAA//8DAJ4LoEAAlL1nAAAAAElFTkSuQmCC") repeat 0 0;
+	filter: invert(var(--pattern-invert));
+	z-index: 0;
+}
+
+.header {
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	position: relative;
+}
+
+.wrapper {
+	position: relative;
+	z-index: 1;
 }
 
 .arrow_btn {
@@ -99,32 +187,26 @@ header {
 	font-family: monospace;
 	line-height: 4.5;
 	font-size: 16px;
-	color: black;
+	color: var(--header-text);
 	font-weight: 900;
 	padding: 20px 0;
 	border-radius: 0;
 }
 
 .typewriter_wrap {
-	border-right: 0.2em solid white;
-}
-
-.header {
-	min-height: 100vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
+	border-right: 0.2em solid var(--header-text);
 }
 
 .header_con {
 	display: flex;
 	flex-flow: column wrap;
-	background: #333;
+	background: var(--header-bg);
 	max-width: 600px;
 	margin: 100px auto 70px;
 	padding: 30px;
 	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+	position: relative;
+	transition: background-color 0.3s, color 0.3s;
 }
 
 .header_con picture {
@@ -143,23 +225,23 @@ header {
 
 .header_con h1 {
 	font: bold 28px/100% monospace;
-	color: white;
+	color: var(--header-text);
 	text-align: left;
 	padding: 30px 0 15px;
 }
 
 .header_con h2 {
 	font: normal 16px monospace;
-	color: white;
+	color: var(--header-text);
 	text-align: left;
 	padding-bottom: 30px;
 }
 
 .header_con p {
 	font: normal 16px/26px monospace;
-	color: white;
+	color: var(--header-text);
 	text-align: left;
-	border-bottom: 1px solid white;
+	border-bottom: 1px solid var(--border-color);
 	padding-bottom: 30px;
 }
 
@@ -183,7 +265,7 @@ header {
 	max-width: 42px;
 	height: 100%;
 	background: none;
-	border: 1px solid white;
+	border: 1px solid var(--border-color);
 	border-radius: 50%;
 	padding: 0;
 }
@@ -200,6 +282,77 @@ header {
 	bottom: 0;
 	min-height: 100px;
 	max-height: 150px;
+}
+
+.theme-toggle {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	z-index: 10;
+}
+
+.theme-toggle:hover {
+	transform: scale(1.1) rotate(5deg);
+}
+
+.theme-toggle:active {
+	transform: scale(0.95);
+}
+
+.toggle-track {
+	width: 40px;
+	height: 40px;
+	background: var(--toggle-bg);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	box-shadow: 0 2px 5px var(--toggle-shadow);
+	position: relative;
+	overflow: hidden;
+}
+
+.toggle-track::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+
+.toggle-track:hover::before {
+	opacity: 1;
+}
+
+.toggle-icon {
+	font-size: 24px;
+	line-height: 1;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	transform-origin: center;
+}
+
+.theme-toggle:hover .toggle-icon {
+	transform: scale(1.1);
 }
 
 @media only screen and (max-width : 768px) {
