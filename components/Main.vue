@@ -8,8 +8,8 @@
 
 					<button class="theme-toggle" @click="toggleTheme" :title="isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
 						<div class="toggle-track">
-							<div class="toggle-icon">
-								{{ isDark ? '☀️' : '🌙' }}
+							<div class="toggle-slider" :class="{ 'is-dark': isDark }">
+								<span class="toggle-icon">{{ isDark ? '☀️' : '🌙' }}</span>
 							</div>
 						</div>
 					</button>
@@ -113,21 +113,23 @@ export default {
 	--text-color: #333333;
 	--header-bg: #ffffff;
 	--header-text: #333333;
-	--border-color: #333333;
+	--border-color: #e5e5e5;
 	--pattern-invert: 1;
-	--toggle-bg: #2d2d2d;
+	--toggle-bg: #333333;
+	--toggle-slider-bg: #ffffff;
 	--toggle-shadow: rgba(0, 0, 0, 0.2);
 	--toggle-hover-shadow: rgba(0, 0, 0, 0.3);
 }
 
 :root[data-theme="dark"] {
-	--bg-color: #1a1a1a;
+	--bg-color: #333333;
 	--text-color: #ffffff;
-	--header-bg: #2d2d2d;
+	--header-bg: #333333;
 	--header-text: #ffffff;
-	--border-color: #ffffff;
+	--border-color: #e5e5e5;
 	--pattern-invert: 0;
-	--toggle-bg: #e4e4e4;
+	--toggle-bg: #ffffff;
+	--toggle-slider-bg: #333333;
 	--toggle-shadow: rgba(255, 255, 255, 0.1);
 	--toggle-hover-shadow: rgba(255, 255, 255, 0.2);
 }
@@ -164,6 +166,7 @@ header {
 	align-items: center;
 	text-align: center;
 	position: relative;
+	padding: 0 20px;
 }
 
 .wrapper {
@@ -207,6 +210,7 @@ header {
 	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 	position: relative;
 	transition: background-color 0.3s, color 0.3s;
+	border-radius: 10px;
 }
 
 .header_con picture {
@@ -215,6 +219,8 @@ header {
 	width: 140px;
 	height: 140px;
 	margin: 0 0 -70px 0;
+	border-radius: 10px;
+	overflow: hidden;
 }
 
 .header_con picture img {
@@ -241,8 +247,6 @@ header {
 	font: normal 16px/26px monospace;
 	color: var(--header-text);
 	text-align: left;
-	border-bottom: 1px solid var(--border-color);
-	padding-bottom: 30px;
 }
 
 .header_con p strong {
@@ -251,6 +255,7 @@ header {
 
 .logo {
 	display: block;
+	text-align: left;
 	margin: 30px 0 0;
 }
 
@@ -264,9 +269,6 @@ header {
 	width: 100%;
 	max-width: 42px;
 	height: 100%;
-	background: none;
-	border: 1px solid var(--border-color);
-	border-radius: 50%;
 	padding: 0;
 }
 
@@ -292,7 +294,7 @@ header {
 	border: none;
 	cursor: pointer;
 	padding: 0;
-	width: 40px;
+	width: 80px;
 	height: 40px;
 	display: flex;
 	align-items: center;
@@ -302,7 +304,7 @@ header {
 }
 
 .theme-toggle:hover {
-	transform: scale(1.1) rotate(5deg);
+	transform: scale(1.05);
 }
 
 .theme-toggle:active {
@@ -310,37 +312,39 @@ header {
 }
 
 .toggle-track {
-	width: 40px;
-	height: 40px;
+	width: 100%;
+	height: 100%;
 	background: var(--toggle-bg);
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	box-shadow: 0 2px 5px var(--toggle-shadow);
+	position: relative;
+	overflow: hidden;
+	padding: 3px;
+}
+
+.toggle-slider {
+	width: 34px;
+	height: 34px;
+	background: var(--toggle-slider-bg);
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-	box-shadow: 0 2px 5px var(--toggle-shadow);
-	position: relative;
-	overflow: hidden;
+	transform: translateX(0);
+	box-shadow: 0 2px 4px var(--toggle-shadow);
 }
 
-.toggle-track::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
-	opacity: 0;
-	transition: opacity 0.3s ease;
-}
-
-.toggle-track:hover::before {
-	opacity: 1;
+.toggle-slider.is-dark {
+	transform: translateX(40px);
 }
 
 .toggle-icon {
-	font-size: 24px;
+	font-size: 20px;
 	line-height: 1;
 	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 	display: flex;
@@ -348,16 +352,11 @@ header {
 	justify-content: center;
 	width: 100%;
 	height: 100%;
-	transform-origin: center;
-}
-
-.theme-toggle:hover .toggle-icon {
-	transform: scale(1.1);
 }
 
 @media only screen and (max-width : 768px) {
     .header_con {
-        margin: 70px 20px;
+        margin: 70px auto;
     }
 
     .waves {
