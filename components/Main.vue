@@ -25,37 +25,39 @@
 
 					<p>Hi there! I'm a web developer with over <strong>6 years</strong> of experience in <strong>HTML</strong>, <strong>CSS</strong>, <strong>JavaScript</strong>, and <strong>PHP</strong>. I also have expertise in <strong>Vue.js</strong> for developing web and mobile applications. I'm continuously learning and adapting to the latest industry trends.</p>
 
-					<NuxtLink to="/blog" class="blog-link">Read my Blog →</NuxtLink>
-
-					<ul class="logo">
-						<li>
-							<figure>
-								<a href="https://github.com/jamesxdaniel" target="_blank" rel="noopener">
-									<img data-src="/images/github.svg" src="/images/github.svg" alt="GitHub">
-								</a>
-							</figure>
-						</li>
-						<li>
-							<figure>
-								<a href="https://www.linkedin.com/in/james-daniel-enovero/" target="_blank" rel="noopener">
-									<img data-src="/images/linkedin.svg" src="/images/linkedin.svg" alt="LinkedIn"></a>
+					<div class="social-row">
+						<ul class="logo">
+							<li>
+								<figure>
+									<a href="https://github.com/jamesxdaniel" target="_blank" rel="noopener">
+										<img data-src="/images/github.svg" src="/images/github.svg" alt="GitHub">
+									</a>
 								</figure>
 							</li>
-						<li>
-							<figure>
-								<a href="https://www.instagram.com/jaamesdaaniel" target="_blank" rel="noopener">
-									<img data-src="/images/instagram.svg" src="/images/instagram.svg" alt="Instagram">
-								</a>
-							</figure>
-						</li>
-						<li>
-							<figure>
-								<a href="mailto:jamesdaniel288@gmail.com">
-									<img data-src="/images/email.svg" src="/images/email.svg" alt="Email">
-								</a>
-							</figure>
-						</li>
-					</ul>
+							<li>
+								<figure>
+									<a href="https://www.linkedin.com/in/james-daniel-enovero/" target="_blank" rel="noopener">
+										<img data-src="/images/linkedin.svg" src="/images/linkedin.svg" alt="LinkedIn"></a>
+								</figure>
+							</li>
+							<li>
+								<figure>
+									<a href="https://www.instagram.com/jaamesdaaniel" target="_blank" rel="noopener">
+										<img data-src="/images/instagram.svg" src="/images/instagram.svg" alt="Instagram">
+									</a>
+								</figure>
+							</li>
+							<li>
+								<figure>
+									<a href="mailto:jamesdaniel288@gmail.com">
+										<img data-src="/images/email.svg" src="/images/email.svg" alt="Email">
+									</a>
+								</figure>
+							</li>
+						</ul>
+
+						<NuxtLink to="/blog" class="blog-link">Read my Blog →</NuxtLink>
+					</div>
 
 				</div>
 
@@ -278,6 +280,15 @@ header {
 	font-weight: bold;
 }
 
+.social-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 30px;
+	gap: 20px;
+	flex-wrap: wrap;
+}
+
 .blog-link {
 	display: inline-block;
 	font: bold 14px monospace;
@@ -285,9 +296,9 @@ header {
 	background: var(--toggle-bg);
 	padding: 12px 24px;
 	border-radius: 8px;
-	margin-top: 25px;
 	text-decoration: none;
 	transition: transform 0.3s, box-shadow 0.3s;
+	white-space: nowrap;
 }
 
 .blog-link:hover {
@@ -296,9 +307,11 @@ header {
 }
 
 .logo {
-	display: block;
+	display: flex;
 	text-align: left;
-	margin: 30px 0 0;
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
 .logo li {
@@ -318,8 +331,16 @@ header {
 }
 
 .logo li:hover figure {
-	transform: scale(1.1);
+	transform: translateY(-2px);
 	cursor: pointer;
+}
+
+.logo li figure {
+	transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.logo li:hover figure {
+	box-shadow: 0 4px 12px var(--toggle-shadow);
 }
 
 .waves {
@@ -407,6 +428,17 @@ header {
     .waves {
         height: 40px;
         min-height: 40px;
+    }
+
+    .social-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .blog-link {
+        width: 100%;
+        text-align: center;
     }
 }
 

@@ -22,9 +22,7 @@
 				</div>
 				<h1 class="post-title">{{ post.title }}</h1>
 				<p class="post-description" v-if="post.description">{{ post.description }}</p>
-				<div class="prose">
-					<ContentRenderer :value="post" />
-				</div>
+				<div class="prose" v-html="renderMarkdown(post.body)"></div>
 			</article>
 
 			<div class="not-found" v-else>
@@ -36,7 +34,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+import { marked } from 'marked';
 
 const route = useRoute();
 const isDark = ref(false);
@@ -69,9 +68,42 @@ function formatDate(dateString) {
 	});
 }
 
-const { data: post } = await useAsyncData(`post-${route.path}`, () =>
-	queryContent(route.path).findOne()
+// Configure marked options
+marked.setOptions({
+	breaks: true,
+	gfm: true,
+});
+
+// Render markdown to HTML using marked
+function renderMarkdown(md) {
+	if (!md) return '';
+	try {
+		return marked.parse(md);
+	} catch (error) {
+		console.error('Error rendering markdown:', error);
+		return md;
+	}
+}
+
+// Extract slug from route path (e.g., /blog/2026-01-22-modern-css -> 2026-01-22-modern-css)
+const slug = route.path.replace('/blog/', '');
+
+// Fetch post from our custom API
+const { data: postData } = await useAsyncData(`post-${slug}`, () =>
+	$fetch(`/api/blog/${slug}`)
 );
+
+// Convert to format expected by template
+const post = computed(() => {
+	if (!postData.value) return null;
+	return {
+		title: postData.value.title,
+		description: postData.value.description,
+		date: postData.value.date,
+		tags: postData.value.tags,
+		body: postData.value.body
+	};
+});
 
 useHead({
 	title: post.value ? `${post.value.title} - James Daniel Enovero` : 'Blog Post',
@@ -133,12 +165,16 @@ useHead({
 .post-container {
 	position: relative;
 	z-index: 1;
-	max-width: 800px;
+	max-width: 1200px;
 	margin: 0 auto;
 	padding: 40px 20px;
 }
 
 .post-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	min-height: 80px;
 	margin-bottom: 30px;
 	background: var(--header-bg);
 	padding: 20px 30px;

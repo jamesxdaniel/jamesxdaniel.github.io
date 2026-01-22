@@ -1,0 +1,16 @@
+[
+  {
+    "_path": "/blog/2026-01-23-getting-started-with-vue-3-composition-api",
+    "title": "Getting Started with Vue 3 Composition API",
+    "description": "Learn how to build better Vue applications using the Composition API with practical examples and best practices.",
+    "date": "2026-01-23",
+    "tags": ["vue", "javascript", "tutorial"]
+  },
+  {
+    "_path": "/blog/2026-01-22-modern-css-techniques",
+    "title": "Modern CSS Techniques for Beautiful UIs",
+    "description": "Discover powerful CSS features and techniques to create stunning, responsive user interfaces with less code.",
+    "date": "2026-01-22",
+    "tags": ["css", "design", "tutorial"]
+  }
+]

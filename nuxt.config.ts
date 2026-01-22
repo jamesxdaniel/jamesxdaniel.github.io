@@ -1,7 +1,20 @@
 export default defineNuxtConfig({
 	ssr: true,
 	modules: ['@nuxt/content'],
+	content: {
+		// Explicitly define content sources
+		sources: {
+			content: {
+				driver: 'fs',
+				base: './content'
+			}
+		}
+	},
 	css: ['~/assets/styles.css'],
+	devServer: {
+		port: 6767,
+		host: '0.0.0.0'
+	},
 	app: {
 		head: {
 			title: 'James Daniel Enovero - Web Developer',
