@@ -26,10 +26,33 @@
 					<p>Hi there! I'm a web developer with over <strong>6 years</strong> of experience in <strong>HTML</strong>, <strong>CSS</strong>, <strong>JavaScript</strong>, and <strong>PHP</strong>. I also have expertise in <strong>Vue.js</strong> for developing web and mobile applications. I'm continuously learning and adapting to the latest industry trends.</p>
 
 					<ul class="logo">
-						<li><figure><a href="https://github.com/jamesxdaniel" target="_blank" rel="noopener"><img data-src="/images/github_logo.png" src="/images/github_logo.png" alt="GitHub" class="lazy"></a></figure></li>
-						<li><figure><a href="https://www.linkedin.com/in/james-daniel-enovero/" target="_blank" rel="noopener"><img data-src="/images/linked_logo.png" src="/images/linked_logo.png" alt="LinkedIn" class="lazy"></a></figure></li>
-						<li><figure><a href="https://www.instagram.com/jaamesdaaniel" target="_blank" rel="noopener"><img data-src="/images/instagram_logo.png" src="/images/instagram_logo.png" alt="Instagram" class="lazy"></a></figure></li>
-						<li><figure><a href="mailto:jamesdaniel288@gmail.com"><img data-src="/images/email_logo.png" src="/images/email_logo.png" alt="Email" class="lazy"></a></figure></li>
+						<li>
+							<figure>
+								<a href="https://github.com/jamesxdaniel" target="_blank" rel="noopener">
+									<img data-src="/images/github.svg" src="/images/github.svg" alt="GitHub">
+								</a>
+							</figure>
+						</li>
+						<li>
+							<figure>
+								<a href="https://www.linkedin.com/in/james-daniel-enovero/" target="_blank" rel="noopener">
+									<img data-src="/images/linkedin.svg" src="/images/linkedin.svg" alt="LinkedIn"></a>
+								</figure>
+							</li>
+						<li>
+							<figure>
+								<a href="https://www.instagram.com/jaamesdaaniel" target="_blank" rel="noopener">
+									<img data-src="/images/instagram.svg" src="/images/instagram.svg" alt="Instagram">
+								</a>
+							</figure>
+						</li>
+						<li>
+							<figure>
+								<a href="mailto:jamesdaniel288@gmail.com">
+									<img data-src="/images/email.svg" src="/images/email.svg" alt="Email">
+								</a>
+							</figure>
+						</li>
 					</ul>
 
 				</div>
@@ -262,18 +285,21 @@ header {
 .logo li {
 	display: inline-block;
 	height: auto;
-	margin: 0 10px;
+	margin: 0 15px 0 0;
 }
 
 .logo li img {
-	width: 100%;
-	max-width: 42px;
-	height: 100%;
+	width: 40px;
+	height: 40px;
 	padding: 0;
 }
 
-.logo li:hover img {
-	transform: scale(.8);
+[data-theme="dark"] .logo li img {
+	filter: invert(100) contrast(100);
+}
+
+.logo li:hover figure {
+	transform: scale(1.1);
 	cursor: pointer;
 }
 
