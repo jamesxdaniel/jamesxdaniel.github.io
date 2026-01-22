@@ -25,6 +25,8 @@
 
 					<p>Hi there! I'm a web developer with over <strong>6 years</strong> of experience in <strong>HTML</strong>, <strong>CSS</strong>, <strong>JavaScript</strong>, and <strong>PHP</strong>. I also have expertise in <strong>Vue.js</strong> for developing web and mobile applications. I'm continuously learning and adapting to the latest industry trends.</p>
 
+					<NuxtLink to="/blog" class="blog-link">Read my Blog →</NuxtLink>
+
 					<ul class="logo">
 						<li>
 							<figure>
@@ -274,6 +276,23 @@ header {
 
 .header_con p strong {
 	font-weight: bold;
+}
+
+.blog-link {
+	display: inline-block;
+	font: bold 14px monospace;
+	color: var(--toggle-slider-bg);
+	background: var(--toggle-bg);
+	padding: 12px 24px;
+	border-radius: 8px;
+	margin-top: 25px;
+	text-decoration: none;
+	transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.blog-link:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px var(--toggle-shadow);
 }
 
 .logo {
