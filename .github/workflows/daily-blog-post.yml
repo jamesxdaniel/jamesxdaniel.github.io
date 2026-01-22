@@ -33,16 +33,19 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/generate-post.mjs
 
+      - name: Update blog posts JSON
+        run: node scripts/update-blog-json.mjs
+
       - name: Check for changes
         id: git-check
         run: |
-          git diff --quiet content/blog/ || echo "changes=true" >> $GITHUB_OUTPUT
+          git diff --quiet content/blog/ public/blog-posts.json || echo "changes=true" >> $GITHUB_OUTPUT
 
       - name: Commit and push
         if: steps.git-check.outputs.changes == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add content/blog/
+          git add content/blog/ public/blog-posts.json
           git commit -m "chore: add weekly blog post for $(date +'%Y-%m-%d')"
           git push

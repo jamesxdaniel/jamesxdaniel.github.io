@@ -241,8 +241,8 @@ useHead({
 
 .blog-header {
 	text-align: left;
-	margin-bottom: 50px;
 	background: var(--header-bg);
+	margin-bottom: 30px;
 	padding: 50px 40px;
 	border-radius: 15px;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -499,6 +499,7 @@ useHead({
 	}
 
 	.blog-header {
+		margin-bottom: 20px;
 		padding: 35px 25px;
 	}
 

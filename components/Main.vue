@@ -56,7 +56,7 @@
 							</li>
 						</ul>
 
-						<NuxtLink to="/blog" class="blog-link">Read my Blog →</NuxtLink>
+						<NuxtLink to="/blog/" class="blog-link">Read my Blog →</NuxtLink>
 					</div>
 
 				</div>
@@ -312,12 +312,13 @@ header {
 	margin: 0;
 	padding: 0;
 	list-style: none;
+	gap: 15px;
 }
 
 .logo li {
 	display: inline-block;
 	height: auto;
-	margin: 0 15px 0 0;
+	margin: 0;
 }
 
 .logo li img {
@@ -432,8 +433,12 @@ header {
 
     .social-row {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
         gap: 20px;
+    }
+
+    .logo {
+        justify-content: center;
     }
 
     .blog-link {

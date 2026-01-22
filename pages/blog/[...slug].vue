@@ -10,7 +10,7 @@
 						</div>
 					</div>
 				</button>
-				<NuxtLink to="/blog" class="back-link">← Back to Blog</NuxtLink>
+				<NuxtLink to="/blog/" class="back-link">← Back to Blog</NuxtLink>
 			</header>
 
 			<article class="post-content" v-if="post">
@@ -27,7 +27,7 @@
 
 			<div class="not-found" v-else>
 				<p>Post not found.</p>
-				<NuxtLink to="/blog" class="back-link">← Back to Blog</NuxtLink>
+				<NuxtLink to="/blog/" class="back-link">← Back to Blog</NuxtLink>
 			</div>
 		</div>
 	</div>

@@ -15,6 +15,14 @@ export default defineNuxtConfig({
 		port: 6767,
 		host: '0.0.0.0'
 	},
+	router: {
+		options: {
+			strict: false
+		}
+	},
+	routeRules: {
+		'/blog/**': { trailingSlash: true }
+	},
 	app: {
 		head: {
 			title: 'James Daniel Enovero - Web Developer',
