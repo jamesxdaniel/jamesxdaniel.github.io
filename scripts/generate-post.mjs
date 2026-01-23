@@ -10,8 +10,9 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 // Other models return 404, suggesting they're not available with current key configuration
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
-// Tech topics to rotate through
+// Tech and Gaming topics to rotate through
 const TOPICS = [
+	// Web Development
 	'JavaScript tips and tricks for modern web development',
 	'Vue.js best practices and patterns',
 	'CSS tricks and techniques for beautiful UIs',
@@ -19,14 +20,45 @@ const TOPICS = [
 	'Node.js performance optimization',
 	'Web accessibility best practices',
 	'Frontend testing strategies',
+	'React vs Vue: choosing the right framework',
+	'Progressive Web Apps development guide',
+	'Web performance optimization techniques',
+	
+	// Programming & DevOps
 	'Git workflow tips for developers',
 	'API design best practices',
-	'Responsive design techniques',
 	'Web security fundamentals',
 	'Developer productivity tools and tips',
 	'Code refactoring strategies',
 	'Database optimization techniques',
-	'Debugging tips for web developers'
+	'Debugging tips for web developers',
+	'Docker containerization for beginners',
+	'CI/CD pipeline best practices',
+	'Microservices architecture patterns',
+	
+	// Game Development
+	'Getting started with game development using Unity',
+	'Introduction to Unreal Engine for beginners',
+	'Game design principles and best practices',
+	'Creating 2D games with Godot Engine',
+	'HTML5 game development with Phaser',
+	'Mobile game development tips and tricks',
+	'Game physics and collision detection basics',
+	'Procedural generation in game development',
+	'Optimizing game performance for different platforms',
+	'Game AI and pathfinding algorithms',
+	
+	// Gaming Industry & Culture
+	'The rise of indie game development',
+	'Esports industry trends and opportunities',
+	'Game streaming and content creation tips',
+	'Monetization strategies for mobile games',
+	'The future of cloud gaming platforms',
+	'Virtual Reality gaming development',
+	'Game localization and internationalization',
+	'Building gaming communities and engagement',
+	'Retro gaming and game preservation',
+	'Cross-platform gaming development challenges'
 ];
 
 function getRandomTopic() {
