@@ -36,18 +36,6 @@ const TOPICS = [
 	'CI/CD pipeline best practices',
 	'Microservices architecture patterns',
 	
-	// Game Development
-	'Getting started with game development using Unity',
-	'Introduction to Unreal Engine for beginners',
-	'Game design principles and best practices',
-	'Creating 2D games with Godot Engine',
-	'HTML5 game development with Phaser',
-	'Mobile game development tips and tricks',
-	'Game physics and collision detection basics',
-	'Procedural generation in game development',
-	'Optimizing game performance for different platforms',
-	'Game AI and pathfinding algorithms',
-	
 	// Gaming Industry & Culture
 	'The rise of indie game development',
 	'Esports industry trends and opportunities',

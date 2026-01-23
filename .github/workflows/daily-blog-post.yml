@@ -1,9 +1,9 @@
-name: Generate Weekly Blog Post
+name: Generate Daily Blog Post
 
 on:
   schedule:
-    # Runs at 6:00 AM UTC every Monday (weekly posts for free tier)
-    - cron: '0 6 * * 1'
+    # Runs at 1:00 AM UTC daily (9:00 AM Philippine Time)
+    - cron: '0 1 * * *'
   # Allow manual trigger from GitHub Actions UI
   workflow_dispatch:
 
@@ -47,5 +47,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add content/blog/ public/blog-posts.json
-          git commit -m "chore: add weekly blog post for $(date +'%Y-%m-%d')"
+          git commit -m "chore: add daily blog post for $(date +'%Y-%m-%d')"
           git push

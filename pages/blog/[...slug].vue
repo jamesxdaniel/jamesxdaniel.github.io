@@ -68,10 +68,27 @@ function formatDate(dateString) {
 	});
 }
 
+// Configure marked renderer to handle external links
+const renderer = new marked.Renderer();
+const originalLinkRenderer = renderer.link.bind(renderer);
+
+renderer.link = function(href, title, text) {
+	const html = originalLinkRenderer(href, title, text);
+	
+	// Check if link is external (starts with http:// or https://)
+	if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+		// Add target="_blank" and rel="noopener noreferrer" for security
+		return html.replace(/^<a /, '<a target="_blank" rel="noopener noreferrer" ');
+	}
+	
+	return html;
+};
+
 // Configure marked options
 marked.setOptions({
 	breaks: true,
 	gfm: true,
+	renderer: renderer
 });
 
 // Render markdown to HTML using marked
