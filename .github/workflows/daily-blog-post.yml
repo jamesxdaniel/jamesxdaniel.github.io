@@ -2,8 +2,8 @@ name: Generate Daily Blog Post
 
 on:
   schedule:
-    # Runs at 1:00 AM UTC daily (9:00 AM Philippine Time)
-    - cron: '0 1 * * *'
+    # Runs at 2:00 AM UTC daily (10:00 AM Philippine Time) - Testing
+    - cron: '0 2 * * *'
   # Allow manual trigger from GitHub Actions UI
   workflow_dispatch:
 
