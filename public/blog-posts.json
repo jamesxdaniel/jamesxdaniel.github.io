@@ -2,14 +2,14 @@
   {
     "_path": "/blog/2026-01-23-creating-2d-games-with-godot-engine-a-web-developer/",
     "title": "Creating 2D Games with Godot Engine: A Web Developers Guide",
-    "description": "Learn how to leverage your web development skills to build 2D games using the powerful and open-source Godot Engine. This guide provides a practical introduction with code examples.",
+    "description": "Dive into the world of 2D game development with Godot Engine. This guide provides a practical introduction for web developers, covering essential concepts and code examples.",
     "date": "2026-01-23",
     "tags": [
-      "Godot Engine",
-      "2D Game Development",
-      "GameDev",
-      "GDScript",
-      "Web Development"
+      "godot",
+      "game development",
+      "2d games",
+      "gdscript",
+      "web development"
     ]
   },
   {
