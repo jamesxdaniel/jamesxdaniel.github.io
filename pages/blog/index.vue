@@ -12,7 +12,7 @@
 				</button>
 				<NuxtLink to="/" class="back-link">← Back to Home</NuxtLink>
 				<h1 class="blog-title">Blog</h1>
-				<p class="blog-subtitle">Tech tutorials, tips, and insights</p>
+				<p class="blog-subtitle">Tech tutorials, tips, and gaming!</p>
 				
 				<div class="search-section" v-if="!pending && posts.length > 0">
 					<input 

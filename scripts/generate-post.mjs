@@ -183,8 +183,8 @@ tags: ["tag1", "tag2"]
 
 				let content = data.candidates[0].content.parts[0].text;
 
-				// Clean up any markdown code block wrappers if present
-				content = content.replace(/^```markdown\n?/, '').replace(/\n?```$/, '');
+				// Clean up any code block wrappers if present (markdown, yaml, or plain)
+				content = content.replace(/^```(?:markdown|yaml|md)?\n?/, '').replace(/\n?```$/, '');
 				content = content.trim();
 
 				// Extract title from frontmatter for filename

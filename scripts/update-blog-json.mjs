@@ -5,15 +5,21 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const CONTENT_DIR = path.join(__dirname, '..', 'content', 'blog');
+const OUTPUT_FILE = path.join(__dirname, '..', 'public', 'blog-posts.json');
+
+// Parse frontmatter from markdown file
 function parseFrontmatter(content) {
-	const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---/;
+	const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
 	const match = content.match(frontmatterRegex);
 	
-	if (!match) return null;
-	
+	if (!match) {
+		return null;
+	}
+
 	const frontmatter = match[1];
 	const meta = {};
-	
+
 	frontmatter.split('\n').forEach(line => {
 		const [key, ...valueParts] = line.split(':');
 		if (key && valueParts.length) {
@@ -29,54 +35,64 @@ function parseFrontmatter(content) {
 			}
 		}
 	});
-	
+
 	return meta;
 }
 
-function updateBlogPostsJson() {
-	const contentDir = path.join(__dirname, '..', 'content', 'blog');
-	const outputPath = path.join(__dirname, '..', 'public', 'blog-posts.json');
-	
-	// Check if content directory exists
-	if (!fs.existsSync(contentDir)) {
-		console.error('Content directory not found:', contentDir);
-		process.exit(1);
-	}
-	
-	// Read all markdown files
-	const files = fs.readdirSync(contentDir)
-		.filter(file => file.endsWith('.md'))
-		.sort()
-		.reverse(); // Newest first
-	
+// Get all blog posts
+function getBlogPosts() {
 	const posts = [];
-	
-	for (const file of files) {
-		const filepath = path.join(contentDir, file);
-		const content = fs.readFileSync(filepath, 'utf-8');
-		const meta = parseFrontmatter(content);
+
+	try {
+		const files = fs.readdirSync(CONTENT_DIR);
 		
-		if (meta) {
-			const slug = file.replace('.md', '');
-			posts.push({
-				_path: `/blog/${slug}/`, // Add trailing slash
-				title: meta.title || '',
-				description: meta.description || '',
-				date: meta.date || '',
-				tags: meta.tags || []
-			});
+		for (const file of files) {
+			if (file.endsWith('.md')) {
+				const filePath = path.join(CONTENT_DIR, file);
+				const content = fs.readFileSync(filePath, 'utf-8');
+				const meta = parseFrontmatter(content);
+
+				if (meta && meta.title && meta.date) {
+					// Extract slug from filename (remove .md extension)
+					const slug = file.replace('.md', '');
+					
+					posts.push({
+						_path: `/blog/${slug}/`,
+						title: meta.title,
+						description: meta.description || '',
+						date: meta.date,
+						tags: meta.tags || []
+					});
+				}
+			}
 		}
+
+		// Sort by date (newest first)
+		posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+		return posts;
+	} catch (error) {
+		console.error('Error reading blog posts:', error);
+		return [];
 	}
-	
-	// Sort by date (newest first)
-	posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-	
-	// Write to public/blog-posts.json
-	fs.writeFileSync(outputPath, JSON.stringify(posts, null, 2), 'utf-8');
-	
-	console.log(`✅ Successfully updated blog-posts.json with ${posts.length} posts`);
-	console.log(`📝 Output: ${outputPath}`);
 }
 
-// Run the updater
-updateBlogPostsJson();
+// Main function
+function updateBlogJson() {
+	console.log('Scanning blog posts...');
+	const posts = getBlogPosts();
+	
+	console.log(`Found ${posts.length} blog post(s)`);
+	
+	// Write to JSON file
+	fs.writeFileSync(OUTPUT_FILE, JSON.stringify(posts, null, 2), 'utf-8');
+	
+	console.log(`✓ Updated ${OUTPUT_FILE}`);
+	console.log('\nPosts included:');
+	posts.forEach((post, index) => {
+		console.log(`  ${index + 1}. ${post.title} (${post.date})`);
+	});
+}
+
+// Run the script
+updateBlogJson();

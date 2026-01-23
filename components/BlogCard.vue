@@ -208,10 +208,11 @@ const readingTime = computed(() => {
 
 .card-footer {
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 12px;
 	flex-wrap: wrap;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	gap: 12px;
 }
 
 .tags {
