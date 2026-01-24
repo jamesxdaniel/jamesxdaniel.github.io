@@ -1,5 +1,18 @@
 [
   {
+    "_path": "/blog/2026-01-24-the-future-of-cloud-gaming-platforms-a-developer/",
+    "title": "The Future of Cloud Gaming Platforms: A Developers Perspective",
+    "description": "Explore the evolving landscape of cloud gaming, focusing on technologies, challenges, and opportunities for web developers.",
+    "date": "2026-01-24",
+    "tags": [
+      "cloud gaming",
+      "web development",
+      "streaming",
+      "WebRTC",
+      "serverless"
+    ]
+  },
+  {
     "_path": "/blog/2026-01-23-creating-2d-games-with-godot-engine-a-web-developer/",
     "title": "Creating 2D Games with Godot Engine: A Web Developers Guide",
     "description": "Dive into the world of 2D game development with Godot Engine. This guide provides a practical introduction for web developers, covering essential concepts and code examples.",
