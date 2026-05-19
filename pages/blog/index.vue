@@ -121,18 +121,21 @@ onMounted(async () => {
 		pending.value = false;
 		return;
 	} catch (jsonError) {
-		console.log('JSON failed, trying queryContent:', jsonError);
-	}
-	
-	// Fallback to queryContent
-	try {
-		const contentData = await queryContent('blog').sort({ date: -1 }).find();
-		if (contentData && contentData.length > 0) {
-			posts.value = contentData;
-			console.log('Posts loaded from queryContent:', contentData.length);
+		console.log('JSON failed, trying queryCollection:', jsonError);
+		try {
+			const contentData = await queryCollection('blog').order('date', 'DESC').all();
+			if (contentData?.length) {
+				posts.value = contentData.map((item) => ({
+					_path: `${item.path}/`,
+					title: item.title,
+					description: item.description,
+					date: item.meta?.date ?? item.date,
+					tags: item.meta?.tags ?? item.tags ?? []
+				}));
+			}
+		} catch (error) {
+			console.error('queryCollection also failed:', error);
 		}
-	} catch (error) {
-		console.error('queryContent also failed:', error);
 	}
 	
 	pending.value = false;
