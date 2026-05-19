@@ -13,29 +13,36 @@
 				<NuxtLink to="/blog/" class="back-link">← Back to Blog</NuxtLink>
 			</header>
 
-			<article class="post-content" v-if="post">
-				<div class="post-meta">
-					<time :datetime="post.date">{{ formatDate(post.date) }}</time>
-					<div class="tags" v-if="post.tags && post.tags.length">
-						<span v-for="tag in post.tags" :key="tag" class="tag">{{ tag }}</span>
-					</div>
-				</div>
-				<h1 class="post-title">{{ post.title }}</h1>
-				<p class="post-description" v-if="post.description">{{ post.description }}</p>
-				<div class="prose" v-html="renderMarkdown(post.body)"></div>
-			</article>
+			<ContentDoc>
+				<template #default="{ doc }">
+					<article class="post-content">
+						<div class="post-meta">
+							<time :datetime="doc.date">{{ formatDate(doc.date) }}</time>
+							<div class="tags" v-if="doc.tags && doc.tags.length">
+								<span v-for="tag in doc.tags" :key="tag" class="tag">{{ tag }}</span>
+							</div>
+						</div>
+						<h1 class="post-title">{{ doc.title }}</h1>
+						<p class="post-description" v-if="doc.description">{{ doc.description }}</p>
+						<div class="prose">
+							<ContentRenderer :value="doc" />
+						</div>
+					</article>
+				</template>
 
-			<div class="not-found" v-else>
-				<p>Post not found.</p>
-				<NuxtLink to="/blog/" class="back-link">← Back to Blog</NuxtLink>
-			</div>
+				<template #not-found>
+					<div class="not-found">
+						<p>Post not found.</p>
+						<NuxtLink to="/blog/" class="back-link">← Back to Blog</NuxtLink>
+					</div>
+				</template>
+			</ContentDoc>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { marked } from 'marked';
+import { ref, onMounted } from 'vue';
 
 const route = useRoute();
 const isDark = ref(false);
@@ -67,84 +74,6 @@ function formatDate(dateString) {
 		day: 'numeric'
 	});
 }
-
-// Configure marked renderer to handle external links
-const renderer = new marked.Renderer();
-const originalLinkRenderer = renderer.link.bind(renderer);
-
-renderer.link = function(href, title, text) {
-	const html = originalLinkRenderer(href, title, text);
-	
-	// Check if link is external (starts with http:// or https://)
-	if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
-		// Add target="_blank" and rel="noopener noreferrer" for security
-		return html.replace(/^<a /, '<a target="_blank" rel="noopener noreferrer" ');
-	}
-	
-	return html;
-};
-
-// Configure marked options
-marked.setOptions({
-	breaks: true,
-	gfm: true,
-	renderer: renderer
-});
-
-// Render markdown to HTML using marked
-function renderMarkdown(md) {
-	if (!md) return '';
-	try {
-		return marked.parse(md);
-	} catch (error) {
-		console.error('Error rendering markdown:', error);
-		return md;
-	}
-}
-
-// Extract slug from route (handles trailing slashes from routeRules)
-function getSlugFromRoute(route) {
-	const param = route.params.slug;
-	const slug = Array.isArray(param) ? param.join('/') : (param || '');
-	return slug.replace(/^\/+|\/+$/g, '');
-}
-
-const slug = getSlugFromRoute(route);
-
-async function fetchPost(slugValue) {
-	if (!slugValue) return null;
-
-	try {
-		return await $fetch(`/blog-posts/${slugValue}.json`);
-	} catch {
-		try {
-			return await $fetch(`/api/blog/${slugValue}`);
-		} catch {
-			return null;
-		}
-	}
-}
-
-const { data: postData } = await useAsyncData(`post-${slug}`, () => fetchPost(slug));
-
-// Convert to format expected by template
-const post = computed(() => {
-	if (!postData.value) return null;
-	return {
-		title: postData.value.title,
-		description: postData.value.description,
-		date: postData.value.date,
-		tags: postData.value.tags,
-		body: postData.value.body
-	};
-});
-
-useHead({
-	title: post.value ? `${post.value.title} - James Daniel Enovero` : 'Blog Post',
-	meta: [
-		{ name: 'description', content: post.value?.description || '' }
-	]
-});
 </script>
 
 <style>
