@@ -36,17 +36,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+
+
 
 
 const route = useRoute();
 const isDark = ref(false);
 
-const cleanPath = route.path.replace(/\/+$/, '') || '/';
+const slug = (Array.isArray(route.params.slug) ? route.params.slug.join('/') : route.params.slug || "");
 
-// Fetch post content using queryCollection
-const { data: post, pending } = await useAsyncData(`post-${cleanPath}`, () =>
-	queryCollection('blog').path(cleanPath).first()
+// Fetch post content using queryCollection by slug (matches the automatically generated _slug field)
+const { data: post, pending } = await useAsyncData(`post-${slug}`, () =>
+  queryCollection('blog').where({ _slug: slug }).first()
 );
 
 onMounted(() => {
