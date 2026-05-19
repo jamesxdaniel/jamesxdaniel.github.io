@@ -6,9 +6,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-// Using gemini-2.0-flash - only model confirmed to work with this API key
-// Other models return 404, suggesting they're not available with current key configuration
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
+
+// Models to try in order — first available free-tier model wins
+const MODELS = [
+	'gemini-2.0-flash-lite',
+	'gemini-1.5-flash',
+	'gemini-1.5-flash-8b',
+	'gemini-2.0-flash',
+];
 
 // Tech and Gaming topics to rotate through
 const TOPICS = [
@@ -75,6 +81,80 @@ function getTodayDate() {
 	return `${year}-${month}-${day}`;
 }
 
+async function tryModel(model, prompt) {
+	const url = `${GEMINI_BASE_URL}/${model}:generateContent?key=${GEMINI_API_KEY}`;
+	const maxRetries = 2;
+	let retryCount = 0;
+	let retryDelay = 1000;
+
+	while (retryCount <= maxRetries) {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				contents: [{ parts: [{ text: prompt }] }],
+				generationConfig: {
+					temperature: 0.7,
+					topK: 40,
+					topP: 0.95,
+					maxOutputTokens: 1500,
+				}
+			})
+		});
+
+		if (!response.ok) {
+			const errorText = await response.text();
+			let errorData;
+			try { errorData = JSON.parse(errorText); } catch (e) { errorData = {}; }
+
+			const isQuotaExhausted = response.status === 429 && (
+				errorData.error?.message?.includes('limit: 0') ||
+				errorData.error?.details?.some(d =>
+					d['@type'] === 'type.googleapis.com/google.rpc.QuotaFailure' &&
+					d.violations?.some(v => v.quotaMetric?.includes('free_tier'))
+				)
+			);
+
+			// If quota is completely exhausted (limit: 0), skip to next model
+			if (isQuotaExhausted) {
+				throw new Error(`QUOTA_EXHAUSTED:${model}`);
+			}
+
+			// Temporary rate limit — retry with backoff
+			if (response.status === 429 && retryCount < maxRetries) {
+				let delay = retryDelay;
+				if (errorData.error?.details) {
+					const retryInfo = errorData.error.details.find(d => d['@type'] === 'type.googleapis.com/google.rpc.RetryInfo');
+					if (retryInfo?.retryDelay) {
+						delay = Math.max(parseInt(retryInfo.retryDelay.replace('s', '')) * 1000, delay);
+					}
+				}
+				console.log(`[${model}] Rate limit hit. Retrying in ${delay / 1000}s... (attempt ${retryCount + 1}/${maxRetries})`);
+				await new Promise(resolve => setTimeout(resolve, delay));
+				retryCount++;
+				retryDelay *= 2;
+				continue;
+			}
+
+			// Model not found or other error — skip to next model
+			if (response.status === 404) {
+				throw new Error(`MODEL_NOT_FOUND:${model}`);
+			}
+
+			throw new Error(`API request failed: ${response.status} - ${errorText}`);
+		}
+
+		const data = await response.json();
+		if (!data.candidates?.[0]?.content) {
+			throw new Error('Invalid response from Gemini API');
+		}
+
+		return data.candidates[0].content.parts[0].text;
+	}
+
+	throw new Error(`Max retries exceeded for model: ${model}`);
+}
+
 async function generateBlogPost() {
 	if (!GEMINI_API_KEY) {
 		console.error('Error: GEMINI_API_KEY environment variable is not set');
@@ -86,7 +166,6 @@ async function generateBlogPost() {
 
 	console.log(`Generating blog post about: ${topic}`);
 
-	// Shorter prompt to reduce token usage
 	const prompt = `Write a technical blog post about "${topic}" for a web developer's blog.
 
 Requirements:
@@ -105,125 +184,58 @@ tags: ["tag1", "tag2"]
 
 [Content in markdown]`;
 
-	// Retry logic for rate limits
-	const maxRetries = 3;
-	let retryCount = 0;
-	let retryDelay = 1000; // Start with 1 second
+	let content = null;
+	let usedModel = null;
 
-	try {
-		while (retryCount <= maxRetries) {
-			try {
-				const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						contents: [{
-							parts: [{
-								text: prompt
-							}]
-						}],
-						generationConfig: {
-							temperature: 0.7,
-							topK: 40,
-							topP: 0.95,
-							maxOutputTokens: 1500, // Reduced to save tokens
-						}
-					})
-				});
-
-				if (!response.ok) {
-					const errorText = await response.text();
-					let errorData;
-					try {
-						errorData = JSON.parse(errorText);
-					} catch (e) {
-						throw new Error(`API request failed: ${response.status} - ${errorText}`);
-					}
-
-					// Handle rate limit errors (429)
-					if (response.status === 429 && retryCount < maxRetries) {
-						// Extract retry delay from error if available
-						let delay = retryDelay;
-						if (errorData.error?.details) {
-							const retryInfo = errorData.error.details.find(d => d['@type'] === 'type.googleapis.com/google.rpc.RetryInfo');
-							if (retryInfo?.retryDelay) {
-								delay = Math.max(parseInt(retryInfo.retryDelay.replace('s', '')) * 1000, delay);
-							}
-						}
-
-						console.log(`Rate limit hit. Retrying in ${delay / 1000} seconds... (attempt ${retryCount + 1}/${maxRetries})`);
-						await new Promise(resolve => setTimeout(resolve, delay));
-						retryCount++;
-						retryDelay *= 2; // Exponential backoff
-						continue;
-					}
-
-					throw new Error(`API request failed: ${response.status} - ${errorText}`);
-				}
-
-				const data = await response.json();
-
-				if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
-					throw new Error('Invalid response from Gemini API');
-				}
-
-				let content = data.candidates[0].content.parts[0].text;
-
-				// Clean up any code block wrappers if present (markdown, yaml, or plain)
-				content = content.replace(/^```(?:markdown|yaml|md)?\n?/, '').replace(/\n?```$/, '');
-				content = content.trim();
-
-				// Extract title from frontmatter for filename
-				const titleMatch = content.match(/title:\s*["'](.+?)["']/);
-				if (!titleMatch) {
-					throw new Error('Could not extract title from generated content');
-				}
-
-				const title = titleMatch[1];
-				const slug = generateSlug(title);
-				const filename = `${today}-${slug}.md`;
-
-				// Ensure content directory exists
-				const contentDir = path.join(__dirname, '..', 'content', 'blog');
-				if (!fs.existsSync(contentDir)) {
-					fs.mkdirSync(contentDir, { recursive: true });
-				}
-
-				// Write the blog post
-				const filepath = path.join(contentDir, filename);
-				fs.writeFileSync(filepath, content, 'utf-8');
-
-				console.log(`Successfully generated blog post: ${filename}`);
-				console.log(`Title: ${title}`);
-				console.log(`Path: ${filepath}`);
-
-				return { success: true, filename, title };
-
-			} catch (error) {
-				if (retryCount < maxRetries && (error.message.includes('429') || error.message.includes('RESOURCE_EXHAUSTED'))) {
-					retryCount++;
-					continue;
-				}
-				throw error;
+	for (const model of MODELS) {
+		try {
+			console.log(`Trying model: ${model}`);
+			content = await tryModel(model, prompt);
+			usedModel = model;
+			break;
+		} catch (error) {
+			if (error.message.startsWith('QUOTA_EXHAUSTED:') || error.message.startsWith('MODEL_NOT_FOUND:')) {
+				console.log(`Skipping ${model}: ${error.message.split(':')[0].toLowerCase().replace('_', ' ')}`);
+				continue;
 			}
+			throw error;
 		}
+	}
 
-		// If we exhausted all retries
-		throw new Error('Max retries exceeded. Rate limit still in effect.');
-
-	} catch (error) {
-		console.error('Error generating blog post:', error.message);
-		if (error.message.includes('429') || error.message.includes('RESOURCE_EXHAUSTED') || error.message.includes('quota')) {
-			console.error('\n⚠️  Rate limit/quota exceeded. The free tier has strict limits.');
-			console.error('Options:');
-			console.error('1. Wait and try again later (free tier resets daily)');
-			console.error('2. Upgrade to a paid Gemini API plan for daily automated posts');
-			console.error('3. Reduce the frequency of posts (e.g., weekly instead of daily)');
-		}
+	if (!content) {
+		console.error('\n⚠️  All models exhausted. Free tier quota is depleted across all available models.');
+		console.error('Options:');
+		console.error('1. Wait until tomorrow (free tier resets daily)');
+		console.error('2. Upgrade to a paid Gemini API plan');
 		process.exit(1);
 	}
+
+	// Clean up any code block wrappers if present
+	content = content.replace(/^```(?:markdown|yaml|md)?\n?/, '').replace(/\n?```$/, '').trim();
+
+	const titleMatch = content.match(/title:\s*["'](.+?)["']/);
+	if (!titleMatch) {
+		throw new Error('Could not extract title from generated content');
+	}
+
+	const title = titleMatch[1];
+	const slug = generateSlug(title);
+	const filename = `${today}-${slug}.md`;
+
+	const contentDir = path.join(__dirname, '..', 'content', 'blog');
+	if (!fs.existsSync(contentDir)) {
+		fs.mkdirSync(contentDir, { recursive: true });
+	}
+
+	const filepath = path.join(contentDir, filename);
+	fs.writeFileSync(filepath, content, 'utf-8');
+
+	console.log(`Successfully generated blog post: ${filename}`);
+	console.log(`Title: ${title}`);
+	console.log(`Model used: ${usedModel}`);
+	console.log(`Path: ${filepath}`);
+
+	return { success: true, filename, title };
 }
 
 // Run the generator
