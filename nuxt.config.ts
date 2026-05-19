@@ -1,3 +1,7 @@
+import blogPosts from './public/blog-posts.json';
+
+const blogRoutes = blogPosts.map((post: { _path: string }) => post._path);
+
 export default defineNuxtConfig({
 	ssr: true,
 	modules: ['@nuxt/content'],
@@ -22,6 +26,11 @@ export default defineNuxtConfig({
 	},
 	routeRules: {
 		'/blog/**': { trailingSlash: true }
+	},
+	nitro: {
+		prerender: {
+			routes: ['/blog/', ...blogRoutes]
+		}
 	},
 	app: {
 		head: {

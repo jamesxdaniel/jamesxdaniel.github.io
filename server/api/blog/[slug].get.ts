@@ -3,7 +3,7 @@ import { join } from 'path';
 
 export default defineEventHandler(async (event) => {
 	try {
-		const slug = getRouterParam(event, 'slug');
+		const slug = getRouterParam(event, 'slug')?.replace(/^\/+|\/+$/g, '');
 		if (!slug) {
 			throw createError({ statusCode: 400, message: 'Slug is required' });
 		}

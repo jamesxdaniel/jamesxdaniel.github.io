@@ -102,13 +102,30 @@ function renderMarkdown(md) {
 	}
 }
 
-// Extract slug from route path (e.g., /blog/2026-01-22-modern-css -> 2026-01-22-modern-css)
-const slug = route.path.replace('/blog/', '');
+// Extract slug from route (handles trailing slashes from routeRules)
+function getSlugFromRoute(route) {
+	const param = route.params.slug;
+	const slug = Array.isArray(param) ? param.join('/') : (param || '');
+	return slug.replace(/^\/+|\/+$/g, '');
+}
 
-// Fetch post from our custom API
-const { data: postData } = await useAsyncData(`post-${slug}`, () =>
-	$fetch(`/api/blog/${slug}`)
-);
+const slug = getSlugFromRoute(route);
+
+async function fetchPost(slugValue) {
+	if (!slugValue) return null;
+
+	try {
+		return await $fetch(`/blog-posts/${slugValue}.json`);
+	} catch {
+		try {
+			return await $fetch(`/api/blog/${slugValue}`);
+		} catch {
+			return null;
+		}
+	}
+}
+
+const { data: postData } = await useAsyncData(`post-${slug}`, () => fetchPost(slug));
 
 // Convert to format expected by template
 const post = computed(() => {
