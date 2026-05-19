@@ -14,7 +14,7 @@
 				<h1 class="blog-title">Blog</h1>
 				<p class="blog-subtitle">Tech tutorials, tips, and gaming!</p>
 				
-				<div class="search-section" v-if="!pending && posts.length > 0">
+				<div class="search-section" v-if="!pending && posts?.length">
 					<input 
 						type="text" 
 						v-model="searchQuery" 
@@ -40,18 +40,11 @@
 				</div>
 			</header>
 
-			<ClientOnly>
-				<template #fallback>
-					<div class="loading">
-						<p>Loading posts...</p>
-					</div>
-				</template>
-				
-				<div v-if="pending" class="loading">
-					<p>Loading posts...</p>
-				</div>
+			<div v-if="pending" class="loading">
+				<p>Loading posts...</p>
+			</div>
 
-				<div v-else-if="posts.length > 0" class="posts-section">
+			<div v-else-if="posts?.length" class="posts-section">
 									
 				<div v-if="filteredPosts.length > 0" class="posts-grid">
 					<BlogCard 
@@ -68,10 +61,9 @@
 				</div>
 			</div>
 
-				<div v-else class="no-posts">
-					<p>No posts yet. Check back soon!</p>
-				</div>
-			</ClientOnly>
+			<div v-else class="no-posts">
+				<p>No posts yet. Check back soon!</p>
+			</div>
 		</div>
 	</div>
 </template>
@@ -106,39 +98,23 @@ function clearFilters() {
 	selectedTag.value = null;
 }
 
-// Load posts on client side only to avoid hydration issues
-const posts = ref([]);
-const pending = ref(true);
-
-onMounted(async () => {
-	pending.value = true;
-	
-	// Try JSON file first (most reliable)
-	try {
-		const jsonData = await $fetch('/blog-posts.json');
-		posts.value = jsonData;
-		console.log('Posts loaded from JSON:', jsonData.length);
-		pending.value = false;
-		return;
-	} catch (jsonError) {
-		console.log('JSON failed, trying queryCollection:', jsonError);
+async function loadBlogPosts() {
+	if (import.meta.server) {
 		try {
-			const contentData = await queryCollection('blog').order('date', 'DESC').all();
-			if (contentData?.length) {
-				posts.value = contentData.map((item) => ({
-					_path: `${item.path}/`,
-					title: item.title,
-					description: item.description,
-					date: item.meta?.date ?? item.date,
-					tags: item.meta?.tags ?? item.tags ?? []
-				}));
-			}
-		} catch (error) {
-			console.error('queryCollection also failed:', error);
+			const { readFile } = await import('node:fs/promises');
+			const { join } = await import('node:path');
+			const raw = await readFile(join(process.cwd(), 'public', 'blog-posts.json'), 'utf-8');
+			return JSON.parse(raw);
+		} catch {
+			// fall through to $fetch during prerender
 		}
 	}
-	
-	pending.value = false;
+
+	return await $fetch('/blog-posts.json');
+}
+
+const { data: posts, pending } = await useAsyncData('blog-posts', loadBlogPosts, {
+	default: () => []
 });
 
 const allTags = computed(() => {

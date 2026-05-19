@@ -28,8 +28,10 @@ export default defineNuxtConfig({
 		'/blog/**': { trailingSlash: true }
 	},
 	nitro: {
+		preset: 'github_pages',
 		prerender: {
-			routes: ['/blog/', ...blogRoutes]
+			routes: ['/blog/', ...blogRoutes],
+			crawlLinks: true
 		}
 	},
 	app: {

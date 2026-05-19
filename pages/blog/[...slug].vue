@@ -15,15 +15,14 @@
 
 			<article class="post-content" v-if="post">
 				<div class="post-meta">
-					<time :datetime="post.date || post.meta?.date">{{ formatDate(post.date || post.meta?.date) }}</time>
+					<time :datetime="post.date">{{ formatDate(post.date) }}</time>
 					<div class="tags" v-if="post.tags && post.tags.length">
 						<span v-for="tag in post.tags" :key="tag" class="tag">{{ tag }}</span>
 					</div>
 				</div>
 				<h1 class="post-title">{{ post.title }}</h1>
 				<p class="post-description" v-if="post.description">{{ post.description }}</p>
-				<div v-if="typeof post.body === 'string'" class="prose" v-html="renderedBody" />
-				<ContentRenderer v-else class="prose" :value="post" />
+				<div class="prose" v-html="renderedBody" />
 			</article>
 
 			<div class="not-found" v-else-if="!pending">
@@ -40,31 +39,30 @@ import { marked } from 'marked';
 const route = useRoute();
 const isDark = ref(false);
 
-const slug = Array.isArray(route.params.slug)
+const slug = (Array.isArray(route.params.slug)
 	? route.params.slug.join('/')
-	: route.params.slug || '';
+	: route.params.slug || ''
+).replace(/\/+$/, '');
 
-async function loadPostFromJson() {
-	try {
-		const { readFile } = await import('node:fs/promises');
-		const { join } = await import('node:path');
-		const raw = await readFile(
-			join(process.cwd(), 'public', 'blog-posts', `${slug}.json`),
-			'utf-8'
-		);
-		return JSON.parse(raw);
-	} catch {
-		return await $fetch(`/blog-posts/${slug}.json`);
+async function loadPost() {
+	if (import.meta.server) {
+		try {
+			const { readFile } = await import('node:fs/promises');
+			const { join } = await import('node:path');
+			const raw = await readFile(
+				join(process.cwd(), 'public', 'blog-posts', `${slug}.json`),
+				'utf-8'
+			);
+			return JSON.parse(raw);
+		} catch {
+			// fall through to $fetch during prerender
+		}
 	}
+
+	return await $fetch(`/blog-posts/${slug}.json`);
 }
 
-const { data: post, pending } = await useAsyncData(`post-${slug}`, async () => {
-	try {
-		return await loadPostFromJson();
-	} catch {
-		return queryCollection('blog').path(`/blog/${slug}`).first();
-	}
-});
+const { data: post, pending } = await useAsyncData(`post-${slug}`, loadPost);
 
 const renderedBody = computed(() => {
 	const body = post.value?.body;
