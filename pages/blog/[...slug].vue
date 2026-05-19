@@ -13,45 +13,42 @@
 				<NuxtLink to="/blog/" class="back-link">← Back to Blog</NuxtLink>
 			</header>
 
-			<ContentDoc :path="cleanPath">
-				<template #default="{ doc }">
-					<article class="post-content">
-						<div class="post-meta">
-							<time :datetime="doc.date">{{ formatDate(doc.date) }}</time>
-							<div class="tags" v-if="doc.tags && doc.tags.length">
-								<span v-for="tag in doc.tags" :key="tag" class="tag">{{ tag }}</span>
-							</div>
-						</div>
-						<h1 class="post-title">{{ doc.title }}</h1>
-						<p class="post-description" v-if="doc.description">{{ doc.description }}</p>
-						<div class="prose">
-							<ContentRenderer :value="doc" />
-						</div>
-					</article>
-				</template>
-
-				<template #not-found>
-					<div class="not-found">
-						<p>Post not found.</p>
-						<NuxtLink to="/blog/" class="back-link">← Back to Blog</NuxtLink>
+			<article class="post-content" v-if="post">
+				<div class="post-meta">
+					<time :datetime="post.date">{{ formatDate(post.date) }}</time>
+					<div class="tags" v-if="post.tags && post.tags.length">
+						<span v-for="tag in post.tags" :key="tag" class="tag">{{ tag }}</span>
 					</div>
-				</template>
-			</ContentDoc>
+				</div>
+				<h1 class="post-title">{{ post.title }}</h1>
+				<p class="post-description" v-if="post.description">{{ post.description }}</p>
+				<div class="prose">
+					<ContentRenderer :value="post" />
+				</div>
+			</article>
+
+			<div class="not-found" v-else-if="!pending">
+				<p>Post not found.</p>
+				<NuxtLink to="/blog/" class="back-link">← Back to Blog</NuxtLink>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const route = useRoute();
-
-const cleanPath = computed(() => {
-	const slug = Array.isArray(route.params.slug) ? route.params.slug.join('/') : (route.params.slug || '');
-	return `/blog/${slug}`.replace(/\/+$/, ''); // Ensure no trailing slash
-});
-
 const isDark = ref(false);
+
+const slug = Array.isArray(route.params.slug)
+	? route.params.slug.join('/')
+	: (route.params.slug || '');
+
+// Fetch post content using queryContent
+const { data: post, pending } = await useAsyncData(`post-${slug}`, () =>
+	queryContent('blog', slug).findOne()
+);
 
 onMounted(() => {
 	const savedTheme = localStorage.getItem('theme');
