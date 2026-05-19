@@ -8,12 +8,12 @@ const __dirname = path.dirname(__filename);
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 
-// Models to try in order — first available free-tier model wins
-const MODELS = [
-	'gemini-2.0-flash-lite',
-	'gemini-1.5-flash',
-	'gemini-1.5-flash-8b',
-	'gemini-2.0-flash',
+// Preferred models in order — cheapest/current first (2.0 and 1.5 are deprecated)
+const PREFERRED_MODELS = [
+	'gemini-2.5-flash-lite',
+	'gemini-2.5-flash',
+	'gemini-3.1-flash-lite',
+	'gemini-3-flash-preview',
 ];
 
 // Tech and Gaming topics to rotate through
@@ -81,6 +81,42 @@ function getTodayDate() {
 	return `${year}-${month}-${day}`;
 }
 
+async function listAvailableModels() {
+	const response = await fetch(`${GEMINI_BASE_URL}?key=${GEMINI_API_KEY}`);
+	if (!response.ok) return [];
+
+	const data = await response.json();
+	return (data.models ?? [])
+		.filter(m => m.supportedGenerationMethods?.includes('generateContent'))
+		.map(m => m.name.replace('models/', ''));
+}
+
+function buildModelList(availableModels) {
+	const available = new Set(availableModels);
+	const ordered = PREFERRED_MODELS.filter(model => available.has(model));
+
+	for (const model of availableModels) {
+		if (!ordered.includes(model) && /flash-lite|flash/i.test(model) && !/tts|live|image|audio|embedding|robotics|computer|deep-research|veo|imagen|lyria/i.test(model)) {
+			ordered.push(model);
+		}
+	}
+
+	return ordered.length > 0 ? ordered : PREFERRED_MODELS;
+}
+
+function isHardQuotaExhausted(status, errorText, errorData) {
+	if (status !== 429) return false;
+	if (errorText.includes('limit: 0')) return true;
+
+	return errorData.error?.details?.some(d =>
+		d['@type'] === 'type.googleapis.com/google.rpc.QuotaFailure' &&
+		d.violations?.some(v =>
+			v.quotaMetric?.includes('free_tier') &&
+			v.quotaId?.includes('PerDay')
+		)
+	) ?? false;
+}
+
 async function tryModel(model, prompt) {
 	const url = `${GEMINI_BASE_URL}/${model}:generateContent?key=${GEMINI_API_KEY}`;
 	const maxRetries = 2;
@@ -107,16 +143,8 @@ async function tryModel(model, prompt) {
 			let errorData;
 			try { errorData = JSON.parse(errorText); } catch (e) { errorData = {}; }
 
-			const isQuotaExhausted = response.status === 429 && (
-				errorData.error?.message?.includes('limit: 0') ||
-				errorData.error?.details?.some(d =>
-					d['@type'] === 'type.googleapis.com/google.rpc.QuotaFailure' &&
-					d.violations?.some(v => v.quotaMetric?.includes('free_tier'))
-				)
-			);
-
-			// If quota is completely exhausted (limit: 0), skip to next model
-			if (isQuotaExhausted) {
+			// Only skip model when daily quota is fully exhausted, not on per-minute limits
+			if (isHardQuotaExhausted(response.status, errorText, errorData)) {
 				throw new Error(`QUOTA_EXHAUSTED:${model}`);
 			}
 
@@ -184,10 +212,19 @@ tags: ["tag1", "tag2"]
 
 [Content in markdown]`;
 
+	const availableModels = await listAvailableModels();
+	const models = buildModelList(availableModels);
+
+	if (availableModels.length > 0) {
+		console.log(`Available models: ${models.join(', ')}`);
+	} else {
+		console.log(`Could not list models, using defaults: ${models.join(', ')}`);
+	}
+
 	let content = null;
 	let usedModel = null;
 
-	for (const model of MODELS) {
+	for (const model of models) {
 		try {
 			console.log(`Trying model: ${model}`);
 			content = await tryModel(model, prompt);
@@ -204,9 +241,11 @@ tags: ["tag1", "tag2"]
 
 	if (!content) {
 		console.error('\n⚠️  All models exhausted. Free tier quota is depleted across all available models.');
+		console.error('This often happens after manual test runs or when using deprecated 2.0 models.');
 		console.error('Options:');
 		console.error('1. Wait until tomorrow (free tier resets daily)');
-		console.error('2. Upgrade to a paid Gemini API plan');
+		console.error('2. Create a new API key at https://aistudio.google.com/apikey');
+		console.error('3. Upgrade to a paid Gemini API plan for daily automation');
 		process.exit(1);
 	}
 
