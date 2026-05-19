@@ -41,9 +41,8 @@ import { ref, onMounted } from 'vue';
 const route = useRoute();
 const isDark = ref(false);
 
-const slug = Array.isArray(route.params.slug)
-	? route.params.slug.join('/')
-	: (route.params.slug || '');
+const slug = (Array.isArray(route.params.slug) ? route.params.slug.join('/') : (route.params.slug || ''))
+	.replace(/^\/+|\/+$/g, '');
 
 // Fetch post content using queryContent
 const { data: post, pending } = await useAsyncData(`post-${slug}`, () =>
