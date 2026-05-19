@@ -37,6 +37,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { queryContent } from '#content';
 
 const route = useRoute();
 const isDark = ref(false);
