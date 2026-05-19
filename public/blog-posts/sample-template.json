@@ -1,0 +1,11 @@
+{
+  "_path": "/blog/sample-template/",
+  "title": "Sample Blog Post",
+  "description": "This is a sample blog post template for reference.",
+  "date": "2026-05-19",
+  "tags": [
+    "sample",
+    "template"
+  ],
+  "body": "# Heading 1\n\nThis is a sample blog post to show the expected format for Markdown files in the `content/blog` directory.\n\n## Heading 2\n\nYou can use standard Markdown features here:\n\n- Bullet points\n- **Bold text**\n- *Italic text*\n- [Links](https://example.com)\n\n### Code snippet\n\n```javascript\nconst message = \"Hello, world!\";\nconsole.log(message);\n```"
+}
