@@ -42,11 +42,12 @@ import { ref, onMounted } from 'vue';
 const route = useRoute();
 const isDark = ref(false);
 
-const slug = (Array.isArray(route.params.slug) ? route.params.slug.join('/') : (route.params.slug || ''))
-	.replace(/^\/+|\/+$/g, '');
+const cleanPath = route.path.replace(/\/+$/, '') || '/';
 
-// Fetch post content using queryContent
-const { data: post, pending } = await useAsyncData(`post-${slug}`, () => $content('blog', slug).fetch())
+// Fetch post content using queryCollection
+const { data: post, pending } = await useAsyncData(`post-${cleanPath}`, () =>
+	queryCollection('blog').path(cleanPath).first()
+);
 
 onMounted(() => {
 	const savedTheme = localStorage.getItem('theme');
