@@ -13,7 +13,7 @@
 				<NuxtLink to="/blog/" class="back-link">← Back to Blog</NuxtLink>
 			</header>
 
-			<ContentDoc>
+			<ContentDoc :path="cleanPath">
 				<template #default="{ doc }">
 					<article class="post-content">
 						<div class="post-meta">
@@ -42,9 +42,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 const route = useRoute();
+
+const cleanPath = computed(() => {
+	const slug = Array.isArray(route.params.slug) ? route.params.slug.join('/') : (route.params.slug || '');
+	return `/blog/${slug}`.replace(/\/+$/, ''); // Ensure no trailing slash
+});
+
 const isDark = ref(false);
 
 onMounted(() => {
