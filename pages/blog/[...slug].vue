@@ -45,9 +45,7 @@ const slug = (Array.isArray(route.params.slug) ? route.params.slug.join('/') : (
 	.replace(/^\/+|\/+$/g, '');
 
 // Fetch post content using queryContent
-const { data: post, pending } = await useAsyncData(`post-${slug}`, () =>
-	queryContent('blog', slug).findOne()
-);
+const { data: post, pending } = await useAsyncData(`post-${slug}`, () => $content('blog', slug).fetch())
 
 onMounted(() => {
 	const savedTheme = localStorage.getItem('theme');
