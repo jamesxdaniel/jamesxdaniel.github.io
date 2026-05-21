@@ -53,27 +53,16 @@ jobs:
           cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Setup Pages
         uses: actions/configure-pages@v5
-        with:
-          # Automatically inject router.base in your Nuxt configuration file and set
-          # target to static (https://nuxtjs.org/docs/configuration-glossary/configuration-target/).
-          #
-          # You may remove this line if you want to manage the configuration yourself.
-          static_site_generator: nuxt
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: .nuxt
-          key: ${{ runner.os }}-nuxt-${{ hashFiles('package-lock.json', 'nuxt.config.ts', 'assets/**', 'pages/**', 'components/**', 'composables/**') }}
-          restore-keys: |
-            ${{ runner.os }}-nuxt-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Update blog post data
         run: node scripts/update-blog-json.mjs
       - name: Clean build output
-        run: rm -rf .output
+        run: rm -rf .output .nuxt
       - name: Static HTML export with Nuxt
         run: ${{ steps.detect-package-manager.outputs.manager }} run generate
+      - name: Verify theme CSS in build output
+        run: grep -q -- '--bg-color' .output/public/index.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
