@@ -163,34 +163,6 @@ useHead({
 });
 </script>
 
-<style>
-:root[data-theme="light"] {
-	--bg-color: #ffffff;
-	--text-color: #333333;
-	--header-bg: #ffffff;
-	--header-text: #333333;
-	--border-color: #e5e5e5;
-	--pattern-invert: 1;
-	--toggle-bg: #333333;
-	--toggle-slider-bg: #ffffff;
-	--toggle-shadow: rgba(0, 0, 0, 0.2);
-	--toggle-hover-shadow: rgba(0, 0, 0, 0.3);
-}
-
-:root[data-theme="dark"] {
-	--bg-color: #333333;
-	--text-color: #ffffff;
-	--header-bg: #333333;
-	--header-text: #ffffff;
-	--border-color: #e5e5e5;
-	--pattern-invert: 0;
-	--toggle-bg: #ffffff;
-	--toggle-slider-bg: #333333;
-	--toggle-shadow: rgba(255, 255, 255, 0.1);
-	--toggle-hover-shadow: rgba(255, 255, 255, 0.2);
-}
-</style>
-
 <style scoped>
 .blog-page {
 	min-height: 100vh;

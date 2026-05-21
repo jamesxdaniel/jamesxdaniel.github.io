@@ -14,7 +14,7 @@ export default defineNuxtConfig({
 			}
 		}
 	},
-	css: ['~/assets/styles.css'],
+	css: ['~/assets/styles.css', '~/assets/theme.css'],
 	devServer: {
 		port: 6767,
 		host: '0.0.0.0'
@@ -25,12 +25,14 @@ export default defineNuxtConfig({
 		}
 	},
 	routeRules: {
-		'/blog/**': { trailingSlash: true }
+		'/blog/**': { trailingSlash: true },
+		'/apps/**': { trailingSlash: true },
+		'/not-following-back/**': { trailingSlash: true }
 	},
 	nitro: {
 		preset: 'github_pages',
 		prerender: {
-			routes: ['/blog/', ...blogRoutes],
+			routes: ['/blog/', '/apps/', '/not-following-back/', ...blogRoutes],
 			crawlLinks: true
 		}
 	},
@@ -82,5 +84,14 @@ export default defineNuxtConfig({
 			]
 		}
 	},
-	compatibilityDate: '2024-07-19'
+	compatibilityDate: '2024-07-19',
+	hooks: {
+		'app:templates'(app) {
+			for (const template of app.templates) {
+				if (template.filename === 'paths.mjs') {
+					template.write = true;
+				}
+			}
+		}
+	}
 })

@@ -4,9 +4,11 @@
 			<div class="background-pattern"></div>
 			<div class="wrapper">
 
-				<div class="header_con">
+				<div class="hero-stack">
 
-					<button class="theme-toggle" @click="toggleTheme" :title="isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+					<div class="header_con">
+
+						<button class="theme-toggle" @click="toggleTheme" :title="isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
 						<div class="toggle-track">
 							<div class="toggle-slider" :class="{ 'is-dark': isDark }">
 								<span class="toggle-icon">{{ isDark ? '☀️' : '🌙' }}</span>
@@ -29,28 +31,42 @@
 						<ul class="logo">
 							<li>
 								<figure>
-									<a href="https://github.com/jamesxdaniel" target="_blank" rel="noopener">
-										<img data-src="/images/github.svg" src="/images/github.svg" alt="GitHub">
+									<a href="https://github.com/jamesxdaniel" target="_blank" rel="noopener" aria-label="GitHub">
+										<svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+										</svg>
 									</a>
 								</figure>
 							</li>
 							<li>
 								<figure>
-									<a href="https://www.linkedin.com/in/james-daniel-enovero/" target="_blank" rel="noopener">
-										<img data-src="/images/linkedin.svg" src="/images/linkedin.svg" alt="LinkedIn"></a>
-								</figure>
-							</li>
-							<li>
-								<figure>
-									<a href="https://www.instagram.com/jaamesdaaniel" target="_blank" rel="noopener">
-										<img data-src="/images/instagram.svg" src="/images/instagram.svg" alt="Instagram">
+									<a href="https://www.linkedin.com/in/james-daniel-enovero/" target="_blank" rel="noopener" aria-label="LinkedIn">
+										<svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+											<rect x="2" y="9" width="4" height="12"/>
+											<circle cx="4" cy="4" r="2"/>
+										</svg>
 									</a>
 								</figure>
 							</li>
 							<li>
 								<figure>
-									<a href="mailto:jamesdaniel288@gmail.com">
-										<img data-src="/images/email.svg" src="/images/email.svg" alt="Email">
+									<a href="https://www.instagram.com/jaamesdaaniel" target="_blank" rel="noopener" aria-label="Instagram">
+										<svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+											<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+											<line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+										</svg>
+									</a>
+								</figure>
+							</li>
+							<li>
+								<figure>
+									<a href="mailto:jamesdaniel288@gmail.com" aria-label="Email">
+										<svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+											<polyline points="22,6 12,13 2,6"/>
+										</svg>
 									</a>
 								</figure>
 							</li>
@@ -58,6 +74,10 @@
 
 						<NuxtLink to="/blog/" class="blog-link">Read my Blog →</NuxtLink>
 					</div>
+
+					</div>
+
+					<NuxtLink to="/apps/" class="apps-sticky-cta">View my Apps →</NuxtLink>
 
 				</div>
 
@@ -134,40 +154,6 @@ export default {
 }
 </script>
 
-<style>
-:root[data-theme="light"] {
-	--bg-color: #ffffff;
-	--text-color: #333333;
-	--header-bg: #ffffff;
-	--header-text: #333333;
-	--border-color: #e5e5e5;
-	--pattern-invert: 1;
-	--toggle-bg: #333333;
-	--toggle-slider-bg: #ffffff;
-	--toggle-shadow: rgba(0, 0, 0, 0.2);
-	--toggle-hover-shadow: rgba(0, 0, 0, 0.3);
-}
-
-:root[data-theme="dark"] {
-	--bg-color: #333333;
-	--text-color: #ffffff;
-	--header-bg: #333333;
-	--header-text: #ffffff;
-	--border-color: #e5e5e5;
-	--pattern-invert: 0;
-	--toggle-bg: #ffffff;
-	--toggle-slider-bg: #333333;
-	--toggle-shadow: rgba(255, 255, 255, 0.1);
-	--toggle-hover-shadow: rgba(255, 255, 255, 0.2);
-}
-
-body {
-	background-color: var(--bg-color);
-	color: var(--text-color);
-	transition: background-color 0.3s, color 0.3s;
-}
-</style>
-
 <style scoped>
 header {
 	position: relative;
@@ -227,17 +213,22 @@ header {
 	border-right: 0.2em solid var(--header-text);
 }
 
+.hero-stack {
+	max-width: 600px;
+	margin: 100px auto 70px;
+}
+
 .header_con {
 	display: flex;
 	flex-flow: column wrap;
 	background: var(--header-bg);
-	max-width: 600px;
-	margin: 100px auto 70px;
 	padding: 30px;
-	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 	position: relative;
 	transition: background-color 0.3s, color 0.3s;
-	border-radius: 10px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	box-shadow: none;
+	margin: 0;
 }
 
 .header_con picture {
@@ -306,6 +297,26 @@ header {
 	box-shadow: 0 4px 12px var(--toggle-shadow);
 }
 
+.apps-sticky-cta {
+	display: block;
+	font: bold 14px monospace;
+	color: var(--toggle-slider-bg);
+	background: var(--toggle-bg);
+	padding: 16px 24px;
+	text-align: center;
+	text-decoration: none;
+	transition: transform 0.3s, box-shadow 0.3s;
+	border-top: 1px solid var(--border-color);
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+	overflow: hidden;
+}
+
+.apps-sticky-cta:hover {
+	transform: translateY(-2px);
+}
+
 .logo {
 	display: flex;
 	text-align: left;
@@ -321,27 +332,28 @@ header {
 	margin: 0;
 }
 
-.logo li img {
-	width: 40px;
-	height: 40px;
-	padding: 0;
+.logo li a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--header-text);
+	text-decoration: none;
+	border-radius: 8px;
+	transition: transform 0.3s, background-color 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
-[data-theme="dark"] .logo li img {
-	filter: invert(100) contrast(100);
-}
-
-.logo li:hover figure {
+.logo li a:hover {
 	transform: translateY(-2px);
-	cursor: pointer;
-}
-
-.logo li figure {
-	transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.logo li:hover figure {
+	background: var(--surface-hover);
+	color: var(--toggle-bg);
 	box-shadow: 0 4px 12px var(--toggle-shadow);
+}
+
+.social-icon {
+	width: 24px;
+	height: 24px;
+	padding: 8px;
+	box-sizing: content-box;
 }
 
 .waves {
@@ -422,8 +434,12 @@ header {
 }
 
 @media only screen and (max-width : 768px) {
-    .header_con {
+    .hero-stack {
         margin: 70px auto;
+    }
+
+    .header_con {
+        margin: 0;
     }
 
     .waves {
@@ -448,7 +464,7 @@ header {
 }
 
 @media only screen and (max-height : 800px) {
-    .header_con {
+    .hero-stack {
         margin: 140px 20px 100px;
     }
 }
