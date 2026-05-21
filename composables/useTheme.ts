@@ -4,14 +4,10 @@ export function useTheme() {
 	const isDark = ref(false);
 
 	onMounted(() => {
-		const savedTheme = localStorage.getItem('theme');
-		if (savedTheme) {
-			isDark.value = savedTheme === 'dark';
-			document.documentElement.setAttribute('data-theme', savedTheme);
-		} else {
-			isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			document.documentElement.setAttribute('data-theme', isDark.value ? 'dark' : 'light');
-		}
+		const theme = document.documentElement.getAttribute('data-theme')
+			|| localStorage.getItem('theme')
+			|| (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+		isDark.value = theme === 'dark';
 	});
 
 	function toggleTheme() {

@@ -96,16 +96,8 @@ export default {
 		}
 	},
 	mounted() {
-		// Check for saved theme preference
-		const savedTheme = localStorage.getItem('theme');
-		if (savedTheme) {
-			this.isDark = savedTheme === 'dark';
-			document.documentElement.setAttribute('data-theme', savedTheme);
-		} else {
-			// Check system preference
-			this.isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			document.documentElement.setAttribute('data-theme', this.isDark ? 'dark' : 'light');
-		}
+		const theme = document.documentElement.getAttribute('data-theme') || 'light';
+		this.isDark = theme === 'dark';
 
 		new Typewriter('.typewrite', {
 			strings: ['front-end developer.', 'back-end developer.'],

@@ -40,7 +40,8 @@ export default defineNuxtConfig({
 		head: {
 			title: 'James Daniel Enovero - Web Developer',
 			htmlAttrs: {
-				lang: 'en'
+				lang: 'en',
+				'data-theme': 'light'
 			},
 			meta: [
 				{ charset: 'utf-8' },
@@ -77,6 +78,11 @@ export default defineNuxtConfig({
 				}
 			],
 			script: [
+				{
+					innerHTML: `(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();`,
+					type: 'text/javascript',
+					tagPriority: 'critical'
+				},
 				{
 					src: 'https://smtpjs.com/v3/smtp.js',
 					defer: true

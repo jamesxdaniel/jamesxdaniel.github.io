@@ -37,7 +37,7 @@
 import { marked } from 'marked';
 
 const route = useRoute();
-const isDark = ref(false);
+const { isDark, toggleTheme } = useTheme();
 
 const slug = (Array.isArray(route.params.slug)
 	? route.params.slug.join('/')
@@ -69,24 +69,6 @@ const renderedBody = computed(() => {
 	if (!body || typeof body !== 'string') return '';
 	return marked.parse(body);
 });
-
-onMounted(() => {
-	const savedTheme = localStorage.getItem('theme');
-	if (savedTheme) {
-		isDark.value = savedTheme === 'dark';
-		document.documentElement.setAttribute('data-theme', savedTheme);
-	} else {
-		isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		document.documentElement.setAttribute('data-theme', isDark.value ? 'dark' : 'light');
-	}
-});
-
-function toggleTheme() {
-	isDark.value = !isDark.value;
-	const theme = isDark.value ? 'dark' : 'light';
-	document.documentElement.setAttribute('data-theme', theme);
-	localStorage.setItem('theme', theme);
-}
 
 function formatDate(dateString) {
 	if (!dateString) return '';

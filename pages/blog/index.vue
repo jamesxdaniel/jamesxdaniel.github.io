@@ -69,29 +69,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 
-const isDark = ref(false);
+const { isDark, toggleTheme } = useTheme();
 const searchQuery = ref('');
 const selectedTag = ref(null);
-
-onMounted(() => {
-	const savedTheme = localStorage.getItem('theme');
-	if (savedTheme) {
-		isDark.value = savedTheme === 'dark';
-		document.documentElement.setAttribute('data-theme', savedTheme);
-	} else {
-		isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		document.documentElement.setAttribute('data-theme', isDark.value ? 'dark' : 'light');
-	}
-});
-
-function toggleTheme() {
-	isDark.value = !isDark.value;
-	const theme = isDark.value ? 'dark' : 'light';
-	document.documentElement.setAttribute('data-theme', theme);
-	localStorage.setItem('theme', theme);
-}
 
 function clearFilters() {
 	searchQuery.value = '';
