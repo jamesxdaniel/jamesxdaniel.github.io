@@ -14,7 +14,7 @@ export default defineNuxtConfig({
 			}
 		}
 	},
-	css: ['~/assets/styles.css', '~/assets/theme.css'],
+	css: ['~/assets/styles.css'],
 	devServer: {
 		port: 6767,
 		host: '0.0.0.0'

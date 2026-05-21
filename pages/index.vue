@@ -5,8 +5,6 @@
 </template>
 
 <script setup>
-import '~/assets/styles.css';
-
 useHead({
 	title: 'James Daniel Enovero - Web Developer',
 	meta: [
