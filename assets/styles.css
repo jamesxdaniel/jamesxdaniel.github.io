@@ -12,6 +12,13 @@
 	--toggle-slider-bg: #ffffff;
 	--toggle-shadow: rgba(0, 0, 0, 0.2);
 	--toggle-hover-shadow: rgba(0, 0, 0, 0.3);
+	--cta-bg: #111111;
+	--cta-fg: #ffffff;
+	--cta-border: #374151;
+	--cta-shimmer: rgba(255, 255, 255, 0.1);
+	--cta-inset: rgba(255, 255, 255, 0.14);
+	--cta-shadow: rgba(0, 0, 0, 0.28);
+	--cta-shadow-hover: rgba(0, 0, 0, 0.36);
 	--text-secondary: #374151;
 	--surface-color: #e5e7eb;
 	--surface-border: #6b7280;
@@ -39,6 +46,13 @@
 	--toggle-slider-bg: #262626;
 	--toggle-shadow: rgba(0, 0, 0, 0.35);
 	--toggle-hover-shadow: rgba(0, 0, 0, 0.45);
+	--cta-bg: #f3f4f6;
+	--cta-fg: #111111;
+	--cta-border: #6b7280;
+	--cta-shimmer: rgba(0, 0, 0, 0.06);
+	--cta-inset: rgba(255, 255, 255, 0.55);
+	--cta-shadow: rgba(0, 0, 0, 0.4);
+	--cta-shadow-hover: rgba(0, 0, 0, 0.5);
 	--text-secondary: #d1d5db;
 	--surface-color: #454545;
 	--surface-border: #9ca3af;

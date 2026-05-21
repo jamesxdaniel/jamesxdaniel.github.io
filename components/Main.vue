@@ -77,7 +77,7 @@
 
 					</div>
 
-					<NuxtLink to="/apps/" class="apps-sticky-cta">View my Apps →</NuxtLink>
+					<NuxtLink to="/apps/" class="apps-sticky-cta">View my Apps</NuxtLink>
 
 				</div>
 
@@ -290,23 +290,66 @@ header {
 }
 
 .apps-sticky-cta {
-	display: block;
-	font: bold 14px monospace;
-	color: var(--toggle-slider-bg);
-	background: var(--toggle-bg);
-	padding: 16px 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	font: bold 15px/1 monospace;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--cta-fg);
+	background-color: var(--cta-bg);
+	background-image: linear-gradient(
+		135deg,
+		transparent 0%,
+		var(--cta-shimmer) 40%,
+		transparent 60%
+	);
+	background-size: 200% 100%;
+	background-position: 100% 0;
+	padding: 18px 28px;
 	text-align: center;
 	text-decoration: none;
-	transition: transform 0.3s, box-shadow 0.3s;
-	border-top: 1px solid var(--border-color);
+	border-top: 2px solid var(--cta-border);
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
-	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+	box-shadow:
+		0 10px 30px var(--cta-shadow),
+		0 4px 10px var(--cta-shadow),
+		inset 0 1px 0 var(--cta-inset);
+	transition: transform 0.3s ease, box-shadow 0.3s ease, background-position 0.5s ease, letter-spacing 0.3s ease;
+	position: relative;
 	overflow: hidden;
 }
 
+.apps-sticky-cta::after {
+	content: '→';
+	font-size: 16px;
+	display: inline-block;
+	transition: transform 0.3s ease;
+}
+
 .apps-sticky-cta:hover {
-	transform: translateY(-2px);
+	transform: translateY(-3px);
+	letter-spacing: 0.12em;
+	color: var(--cta-fg);
+	box-shadow:
+		0 16px 40px var(--cta-shadow-hover),
+		0 6px 14px var(--cta-shadow),
+		inset 0 1px 0 var(--cta-inset);
+	background-position: 0% 0;
+}
+
+.apps-sticky-cta:hover::after {
+	transform: translateX(5px);
+}
+
+.apps-sticky-cta:active {
+	transform: translateY(-1px);
+	box-shadow:
+		0 6px 16px var(--cta-shadow),
+		0 2px 6px var(--cta-shadow),
+		inset 0 1px 0 var(--cta-inset);
 }
 
 .logo {
